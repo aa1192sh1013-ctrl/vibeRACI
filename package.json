@@ -1,0 +1,25 @@
+{
+  "name": "viberaci",
+  "version": "0.0.1",
+  "description": "Turn your app idea into an AI coding team: who does what, in what order, with copy-paste prompts for Claude Code and Codex.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "render:example": "tsx scripts/render-example.ts"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+
+# Local scratch output from `npm run render:example`
+.render-out/
+
+# Claude Code local permission allowlist (machine-specific)
+.claude/settings.local.json

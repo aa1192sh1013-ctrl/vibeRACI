@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "locale": "en",
+    "projectName": "Secondhand Market",
+    "idea": "A marketplace where people list things they no longer want, chat with a buyer, and agree on a sale.",
+    "goal": "mvp",
+    "experience": "none",
+    "tools": ["claude-code", "codex"],
+    "createdAt": "2026-08-08T00:00:00.000Z"
+  },
+  "stack": {
+    "name": "Next.js + SQLite",
+    "why": "One project runs both the screens and the server, and the database is a single file you can delete and start over.",
+    "packages": ["next", "react", "better-sqlite3", "zod"]
+  },
+  "roles": [
+    {
+      "id": "architect",
+      "archetype": "architect",
+      "emoji": "🧠",
+      "displayName": "Architect",
+      "summary": "Decides how the app is put together and what the data looks like, before anyone writes a feature.",
+      "responsibilities": [
+        "Decide what a listing, a user, and a chat message look like as data",
+        "Write down the folder layout the rest of the team will build into",
+        "Write down the addresses (API routes) the screens will call"
+      ],
+      "consults": [],
+      "tool": "claude-code"
+    },
+    {
+      "id": "ui",
+      "archetype": "ui-developer",
+      "emoji": "🎨",
+      "displayName": "UI Developer",
+      "summary": "Builds the screens people actually click on.",
+      "responsibilities": [
+        "Build the listing feed, the listing detail page, and the upload form",
+        "Build the chat screen",
+        "Handle loading and empty states so the app never looks broken"
+      ],
+      "consults": ["feature"],
+      "tool": "claude-code"
+    },
+    {
+      "id": "feature",
+      "archetype": "feature-developer",
+      "emoji": "⚙️",
+      "displayName": "Feature Developer",
+      "summary": "Builds login, the database, and everything that happens behind the screens.",
+      "responsibilities": [
+        "Create the database tables for users, listings, and messages",
+        "Build sign up and log in",
+        "Build the API routes the screens call"
+      ],
+      "consults": ["architect"],
+      "tool": "codex"
+    },
+    {
+      "id": "reviewer",
+      "archetype": "reviewer",
+      "emoji": "🔍",
+      "displayName": "Reviewer",
+      "summary": "Checks the others' work for bugs and missing pieces before you call it done.",
+      "responsibilities": [
+        "Walk through the whole flow: sign up, post a listing, message the seller",
+        "Write tests for the parts most likely to break",
+        "Report anything the other agents left half-finished"
+      ],
+      "consults": ["ui", "feature"],
+      "tool": "claude-code"
+    }
+  ],
+  "ownership": [
+    { "glob": "docs/**", "roleId": "architect", "mode": "owns" },
+    { "glob": "app/**", "roleId": "ui", "mode": "owns" },
+    { "glob": "components/**", "roleId": "ui", "mode": "owns" },
+    { "glob": "server/**", "roleId": "feature", "mode": "owns" },
+    { "glob": "db/**", "roleId": "feature", "mode": "owns" },
+    { "glob": "tests/**", "roleId": "reviewer", "mode": "owns" },
+
+    { "glob": "docs/**", "roleId": "ui", "mode": "reads" },
+    { "glob": "docs/**", "roleId": "feature", "mode": "reads" },
+    { "glob": "server/**", "roleId": "ui", "mode": "reads" },
+    { "glob": "app/**", "roleId": "reviewer", "mode": "reads" },
+    { "glob": "server/**", "roleId": "reviewer", "mode": "reads" },
+
+    {
+      "glob": "shared/types.ts",
+      "roleId": "ui",
+      "mode": "shared",
+      "note": "Both sides use this file. Add to it, never rewrite what is already there, and say what you added when you finish."
+    },
+    {
+      "glob": "shared/types.ts",
+      "roleId": "feature",
+      "mode": "shared",
+      "note": "Both sides use this file. Add to it, never rewrite what is already there, and say what you added when you finish."
+    },
+
+    { "glob": "db/migrations/**", "roleId": "ui", "mode": "denied" },
+    { "glob": "db/migrations/**", "roleId": "architect", "mode": "denied" }
+  ],
+  "steps": [
+    {
+      "id": "plan-structure",
+      "roleId": "architect",
+      "phase": 1,
+      "title": "Plan the structure",
+      "goal": "Decide the shape of the data and the folder layout so the other two never have to guess.",
+      "tasks": [
+        "Write docs/architecture.md describing the folders and what goes in each",
+        "Write docs/data-model.md describing users, listings, and messages and how they relate",
+        "Write docs/api.md listing every address the screens will call, with what goes in and what comes back",
+        "Create shared/types.ts with the TypeScript types for users, listings, and messages"
+      ],
+      "doneWhen": [
+        "docs/architecture.md, docs/data-model.md and docs/api.md all exist",
+        "shared/types.ts exists and lists a type for users, listings and messages",
+        "No code outside docs/ and shared/types.ts was created"
+      ],
+      "handoffTo": ["ui", "feature"]
+    },
+    {
+      "id": "build-backend",
+      "roleId": "feature",
+      "phase": 2,
+      "title": "Build the database and login",
+      "goal": "Make the server side real: tables, accounts, and the addresses the screens will call.",
+      "tasks": [
+        "Read docs/data-model.md and docs/api.md first",
+        "Create the database tables described there",
+        "Build sign up and log in",
+        "Build every API route listed in docs/api.md",
+        "Confirm each route returns the shape docs/api.md promises"
+      ],
+      "doneWhen": [
+        "The database file is created when the app starts",
+        "A new account can be created and logged into",
+        "Every route in docs/api.md exists and returns real data"
+      ],
+      "handoffTo": ["ui", "reviewer"]
+    },
+    {
+      "id": "build-ui",
+      "roleId": "ui",
+      "phase": 2,
+      "title": "Build the screens",
+      "goal": "Build every screen a user touches, using the addresses the Architect wrote down.",
+      "tasks": [
+        "Read docs/api.md first so the screens call the right addresses",
+        "Build the listing feed and the listing detail page",
+        "Build the upload form for posting an item",
+        "Build the chat screen",
+        "Show something sensible while loading and when there is nothing to show"
+      ],
+      "doneWhen": [
+        "Every screen can be reached by clicking, with no dead links",
+        "The feed shows listings that came from the server, not fake placeholder data",
+        "Nothing in server/ or db/ was changed"
+      ],
+      "handoffTo": ["reviewer"]
+    },
+    {
+      "id": "review",
+      "roleId": "reviewer",
+      "phase": 3,
+      "title": "Check the whole thing",
+      "goal": "Find what is broken or missing before the owner calls this finished.",
+      "tasks": [
+        "Run the app and go through it as a real user: sign up, post an item, message the seller",
+        "Write tests for sign up, posting a listing, and sending a message",
+        "List anything half-finished, and say which teammate should fix it"
+      ],
+      "doneWhen": [
+        "Tests exist for sign up, posting a listing, and sending a message",
+        "All tests pass",
+        "A written list of remaining problems exists, each one assigned to a teammate"
+      ],
+      "handoffTo": []
+    }
+  ],
+  "scaffold": [
+    { "path": "docs", "kind": "dir", "ownerRoleId": "architect" },
+    { "path": "app", "kind": "dir", "ownerRoleId": "ui" },
+    { "path": "components", "kind": "dir", "ownerRoleId": "ui" },
+    { "path": "server", "kind": "dir", "ownerRoleId": "feature" },
+    { "path": "db", "kind": "dir", "ownerRoleId": "feature" },
+    { "path": "db/migrations", "kind": "dir", "ownerRoleId": "feature" },
+    { "path": "shared", "kind": "dir" },
+    { "path": "tests", "kind": "dir", "ownerRoleId": "reviewer" }
+  ]
+}

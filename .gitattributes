@@ -1,0 +1,4 @@
+# Keep line endings consistent in the repository no matter who clones it.
+# The generated output is compared byte for byte in tests, so drifting
+# endings between Windows and macOS would show up as phantom diffs.
+* text=auto eol=lf
