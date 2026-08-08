@@ -47,6 +47,24 @@ const idSchema = z
   .string()
   .regex(/^[a-z][a-z0-9-]*$/, "ids must be lowercase kebab-case");
 
+/**
+ * A path we are willing to create inside someone's project folder.
+ *
+ * Plans are written by a language model, so these strings are untrusted input.
+ * A plan asking for `../../.ssh/config` must be rejected before anything is
+ * ever written, not caught later by the file writer.
+ */
+const projectPathSchema = z
+  .string()
+  .min(1)
+  .refine((p) => !p.startsWith("/") && !p.startsWith("\\"), "paths must be relative")
+  .refine((p) => !/^[a-zA-Z]:/.test(p), "paths must be relative, not a drive letter")
+  .refine(
+    (p) => !p.split(/[/\\]/).includes(".."),
+    "paths must stay inside the project folder",
+  )
+  .refine((p) => !p.includes("\0"), "paths must not contain null bytes");
+
 export const ownershipRuleSchema = z.object({
   glob: z.string().min(1),
   roleId: idSchema,
@@ -92,7 +110,7 @@ export const stepSchema = z.object({
 export type Step = z.infer<typeof stepSchema>;
 
 export const scaffoldEntrySchema = z.object({
-  path: z.string().min(1),
+  path: projectPathSchema,
   kind: z.enum(["dir", "file"]),
   ownerRoleId: idSchema.optional(),
   /** Only for `file`. Omitted means "create empty". */

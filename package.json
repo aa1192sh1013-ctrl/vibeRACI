@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "render:example": "tsx scripts/render-example.ts"
+    "render:example": "tsx scripts/render-example.ts",
+    "scaffold:example": "tsx scripts/scaffold-example.ts"
   },
   "dependencies": {
     "zod": "^3.23.8"

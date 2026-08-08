@@ -21,8 +21,8 @@ Early development. Not usable yet.
 | --- | --- | --- |
 | M0 | Verify the whole idea is technically possible | done |
 | M1 | Plan schema and the file renderers | done |
-| M2 | Write a real project scaffold to disk | next |
-| M3 | Turn an idea into a plan | |
+| M2 | Write a real project scaffold to disk | done |
+| M3 | Turn an idea into a plan | next |
 | M4 | Guided step-by-step runbook commands | |
 | M5 | Public release | |
 
@@ -39,15 +39,28 @@ idea ──► plan.json ──┬──► START-HERE.md          the human's r
                      └──► .agents/settings/*     optional hard limits
 ```
 
-## Try the renderer
+## Try it
 
 ```bash
 npm install
 npm test
-npm run render:example        # or: npm run render:example -- ko
 ```
 
-Output lands in `.render-out/`.
+See the generated files on their own:
+
+```bash
+npm run render:example              # or: npm run render:example -- ko
+```
+
+Or build a whole example project you can open and work in:
+
+```bash
+npm run scaffold:example -- ./my-test-project ko
+```
+
+Scaffolding only ever writes inside the folder you name. It never deletes
+anything, refuses rather than overwriting a file you changed, and does nothing
+at all on a second run when the plan has not changed.
 
 ## License
 
