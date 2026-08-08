@@ -11,7 +11,7 @@ import { strings, toolName } from "../core/strings.js";
 import {
   HEADER_MARK,
   bullets,
-  pathsOwnedByOthers,
+  mustNotModify,
   roleById,
   rulesFor,
   section,
@@ -27,13 +27,11 @@ export function renderAgentCharter(plan: Plan, role: Role): string {
     (r) => `\`${r.glob}\` — ${r.note ?? ""}`.trimEnd(),
   );
 
-  // Explicit denials, plus everything another role owns.
-  const denied = [
-    ...rulesFor(plan, role.id, "denied").map((r) => `\`${r.glob}\``),
-    ...pathsOwnedByOthers(plan, role.id).map(
-      (r) => `\`${r.glob}\` — ${roleById(plan, r.roleId).displayName}`,
-    ),
-  ];
+  // Explicit denials, plus everything another role owns that is not already
+  // covered by the read-only list above.
+  const denied = mustNotModify(plan, role.id).map((r) =>
+    r.mode === "owns" ? `\`${r.glob}\` — ${roleById(plan, r.roleId).displayName}` : `\`${r.glob}\``,
+  );
 
   const consultNames = role.consults.map((id) => {
     const other = roleById(plan, id);

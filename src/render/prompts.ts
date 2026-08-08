@@ -8,15 +8,7 @@
  */
 import type { Plan, Step } from "../core/schema.js";
 import { strings } from "../core/strings.js";
-import {
-  bullets,
-  charterPath,
-  numbered,
-  pathsOwnedByOthers,
-  roleById,
-  rulesFor,
-  section,
-} from "./shared.js";
+import { bullets, charterPath, mustNotModify, numbered, roleById, rulesFor, section } from "./shared.js";
 
 export function renderPrompt(plan: Plan, step: Step): string {
   const s = strings(plan.meta.locale);
@@ -27,12 +19,9 @@ export function renderPrompt(plan: Plan, step: Step): string {
   const shared = rulesFor(plan, role.id, "shared").map(
     (r) => `\`${r.glob}\` — ${r.note ?? ""}`.trimEnd(),
   );
-  const offLimits = [
-    ...rulesFor(plan, role.id, "denied").map((r) => `\`${r.glob}\``),
-    ...pathsOwnedByOthers(plan, role.id).map(
-      (r) => `\`${r.glob}\` — ${roleById(plan, r.roleId).displayName}`,
-    ),
-  ];
+  const offLimits = mustNotModify(plan, role.id).map((r) =>
+    r.mode === "owns" ? `\`${r.glob}\` — ${roleById(plan, r.roleId).displayName}` : `\`${r.glob}\``,
+  );
 
   const handoffNames = step.handoffTo.map((id) => {
     const other = roleById(plan, id);

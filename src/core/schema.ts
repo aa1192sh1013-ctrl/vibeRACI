@@ -155,6 +155,7 @@ export type Plan = z.infer<typeof planSchema>;
  */
 function validatePlanIntegrity(
   plan: {
+    meta: { tools: ToolId[] };
     roles: Role[];
     ownership: OwnershipRule[];
     steps: Step[];
@@ -166,6 +167,18 @@ function validatePlanIntegrity(
 
   const fail = (path: (string | number)[], message: string) =>
     ctx.addIssue({ code: z.ZodIssueCode.custom, path, message });
+
+  plan.roles.forEach((role, i) => {
+    // Assigning work to a tool the user does not have produces a step they
+    // simply cannot run. The planner is told which tools exist; this is what
+    // makes ignoring that a rejection rather than a surprise later.
+    if (!plan.meta.tools.includes(role.tool)) {
+      fail(
+        ["roles", i, "tool"],
+        `"${role.tool}" is not one of the tools the user has (${plan.meta.tools.join(", ")})`,
+      );
+    }
+  });
 
   plan.roles.forEach((role, i) => {
     if (plan.roles.filter((r) => r.id === role.id).length > 1) {

@@ -26,6 +26,22 @@ export function pathsOwnedByOthers(plan: Plan, roleId: string): OwnershipRule[] 
   return plan.ownership.filter((r) => r.mode === "owns" && r.roleId !== roleId);
 }
 
+/**
+ * The "do not touch" list, with anything already listed as read-only removed.
+ *
+ * A path can be both "read this for context" and "owned by someone else", and
+ * printing it under both headings makes a reader hunt for the difference
+ * between two rules that say the same thing. The read-only heading is the more
+ * useful of the two, so it wins.
+ */
+export function mustNotModify(plan: Plan, roleId: string): OwnershipRule[] {
+  const alreadyListed = new Set(rulesFor(plan, roleId, "reads").map((r) => r.glob));
+  return [
+    ...rulesFor(plan, roleId, "denied"),
+    ...pathsOwnedByOthers(plan, roleId),
+  ].filter((rule) => !alreadyListed.has(rule.glob));
+}
+
 export function stepsForRole(plan: Plan, roleId: string): Step[] {
   return plan.steps.filter((s) => s.roleId === roleId);
 }

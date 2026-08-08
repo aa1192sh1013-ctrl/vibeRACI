@@ -22,8 +22,8 @@ Early development. Not usable yet.
 | M0 | Verify the whole idea is technically possible | done |
 | M1 | Plan schema and the file renderers | done |
 | M2 | Write a real project scaffold to disk | done |
-| M3 | Turn an idea into a plan | next |
-| M4 | Guided step-by-step runbook commands | |
+| M3 | Turn an idea into a plan | done |
+| M4 | Guided step-by-step runbook commands | next |
 | M5 | Public release | |
 
 ## How it fits together
@@ -61,6 +61,16 @@ npm run scaffold:example -- ./my-test-project ko
 Scaffolding only ever writes inside the folder you name. It never deletes
 anything, refuses rather than overwriting a file you changed, and does nothing
 at all on a second run when the plan has not changed.
+
+Or go end to end from an idea, using whichever AI tool your machine has:
+
+```bash
+npm run plan -- "a site where neighbours give away things they no longer need" ko ./giveaway
+```
+
+You need Claude Code or Codex installed and logged in, or an
+`ANTHROPIC_API_KEY`. With none of them it still builds a project, from rules
+rather than from your idea, and tells you that is what happened.
 
 ## License
 

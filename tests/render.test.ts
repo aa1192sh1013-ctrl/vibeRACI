@@ -84,6 +84,18 @@ describe("boundaries reach the agent", () => {
     expect(prompt).toContain("`docs/**`");
   });
 
+  it("never lists the same path under two different rules", () => {
+    // `docs/**` is read-only for the UI and owned by the Architect. Printing it
+    // under both headings makes a reader hunt for a difference that is not there.
+    const prompt = get(".agents/prompts/build-ui.md");
+    const readSection = prompt.split("## Read these")[1]?.split("##")[0] ?? "";
+    const denySection = prompt.split("## What you must not modify")[1]?.split("##")[0] ?? "";
+    expect(readSection).toContain("`docs/**`");
+    expect(denySection).not.toContain("`docs/**`");
+    // Paths that are genuinely only forbidden still appear.
+    expect(denySection).toContain("`db/**`");
+  });
+
   it("explains what to do with a shared file instead of just forbidding it", () => {
     const prompt = get(".agents/prompts/build-ui.md");
     expect(prompt).toContain("shared/types.ts");

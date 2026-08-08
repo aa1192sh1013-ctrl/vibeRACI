@@ -12,10 +12,12 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "render:example": "tsx scripts/render-example.ts",
-    "scaffold:example": "tsx scripts/scaffold-example.ts"
+    "scaffold:example": "tsx scripts/scaffold-example.ts",
+    "plan": "tsx scripts/plan-example.ts"
   },
   "dependencies": {
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

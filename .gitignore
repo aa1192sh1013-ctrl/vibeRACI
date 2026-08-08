@@ -7,3 +7,6 @@ dist/
 
 # Claude Code local permission allowlist (machine-specific)
 .claude/settings.local.json
+
+# Local output from `npm run plan`
+.plan-out.json
