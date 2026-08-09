@@ -16,6 +16,8 @@
  * failure is interpreted then.
  */
 import { spawnSync } from "node:child_process";
+import type { Locale } from "../core/schema.js";
+import { strings } from "../core/strings.js";
 
 export type ToolStatus = "ready" | "not-installed" | "not-logged-in" | "unknown";
 
@@ -42,14 +44,15 @@ function isInstalled(command: string): boolean {
   return !result.error && result.status === 0;
 }
 
-export function detectClaude(): ToolCapability {
+export function detectClaude(locale: Locale = "en"): ToolCapability {
+  const s = strings(locale);
   if (!isInstalled("claude")) {
     return {
       id: "claude-cli",
       label: "Claude Code",
       status: "not-installed",
-      detail: "Claude Code is not installed, or your terminal cannot find it.",
-      fix: "Install Claude Code, then close and reopen your terminal.",
+      detail: s.claudeMissing,
+      fix: s.claudeMissingFix,
     };
   }
 
@@ -59,18 +62,19 @@ export function detectClaude(): ToolCapability {
     id: "claude-cli",
     label: "Claude Code",
     status: "unknown",
-    detail: "Claude Code is installed. Whether it is logged in is checked when it is used.",
+    detail: s.claudeLoginUnknown,
   };
 }
 
-export function detectCodex(): ToolCapability {
+export function detectCodex(locale: Locale = "en"): ToolCapability {
+  const s = strings(locale);
   if (!isInstalled("codex")) {
     return {
       id: "codex-cli",
       label: "Codex",
       status: "not-installed",
-      detail: "Codex is not installed, or your terminal cannot find it.",
-      fix: "Install Codex, then close and reopen your terminal.",
+      detail: s.codexMissing,
+      fix: s.codexMissingFix,
     };
   }
 
@@ -81,7 +85,7 @@ export function detectCodex(): ToolCapability {
       id: "codex-cli",
       label: "Codex",
       status: "ready",
-      detail: (status.stdout || "Logged in.").trim(),
+      detail: (status.stdout || s.codexLoggedIn).trim(),
     };
   }
 
@@ -89,31 +93,30 @@ export function detectCodex(): ToolCapability {
     id: "codex-cli",
     label: "Codex",
     status: "not-logged-in",
-    detail: "Codex is installed but not logged in.",
-    fix: "Run: codex login",
+    detail: s.codexNotLoggedIn,
+    fix: s.codexNotLoggedInFix,
   };
 }
 
-export function detectApiKey(env: NodeJS.ProcessEnv = process.env): ToolCapability {
+export function detectApiKey(
+  env: NodeJS.ProcessEnv = process.env,
+  locale: Locale = "en",
+): ToolCapability {
+  const s = strings(locale);
   const key = env.ANTHROPIC_API_KEY?.trim();
-  if (key) {
-    return {
-      id: "anthropic-api",
-      label: "your Anthropic API key",
-      status: "ready",
-      detail: "Found an API key in ANTHROPIC_API_KEY.",
-    };
-  }
   return {
     id: "anthropic-api",
-    label: "your Anthropic API key",
-    status: "not-installed",
-    detail: "No API key set. This is only needed if neither Claude Code nor Codex works.",
+    label: s.apiKeyLabel,
+    status: key ? "ready" : "not-installed",
+    detail: key ? s.apiKeyFound : s.apiKeyMissing,
   };
 }
 
-export function detectAll(env: NodeJS.ProcessEnv = process.env): ToolCapability[] {
-  return [detectClaude(), detectCodex(), detectApiKey(env)];
+export function detectAll(
+  env: NodeJS.ProcessEnv = process.env,
+  locale: Locale = "en",
+): ToolCapability[] {
+  return [detectClaude(locale), detectCodex(locale), detectApiKey(env, locale)];
 }
 
 /**
@@ -122,37 +125,22 @@ export function detectAll(env: NodeJS.ProcessEnv = process.env): ToolCapability[
  * The raw text is kept as a last resort, but the recognised cases are the ones
  * that actually happen, and each of them has a fix that is one line long.
  */
-export function explainProviderFailure(providerId: string, message: string): string {
+export function explainProviderFailure(
+  providerId: string,
+  message: string,
+  locale: Locale = "en",
+): string {
+  const s = strings(locale);
   const text = message.toLowerCase();
 
   if (text.includes("not logged in") || text.includes("/login")) {
-    return providerId === "codex-cli"
-      ? "Codex is not logged in. Run: codex login"
-      : [
-          "Claude Code is installed but its command line is not logged in.",
-          "(Being signed in to the Claude app is not the same thing.)",
-          "",
-          "Fix it once:",
-          "  1. Run: claude",
-          "  2. Type: /login",
-          "  3. Finish signing in, then type: exit",
-        ].join("\n");
+    return providerId === "codex-cli" ? s.codexNeedsLogin : s.claudeNeedsLogin;
   }
-
-  if (text.includes("could not run")) {
-    return `That tool could not be started. Close and reopen your terminal, then try again.\n\n${message}`;
-  }
-
-  if (text.includes("timed out")) {
-    return "That took too long and was stopped. Check your internet connection and try again.";
-  }
-
-  if (text.includes("api key was rejected")) {
-    return "That API key was rejected. Check ANTHROPIC_API_KEY for a typo or an expired key.";
-  }
-
+  if (text.includes("could not run")) return `${s.toolWouldNotStart}\n\n${message}`;
+  if (text.includes("timed out")) return s.requestTimedOut;
+  if (text.includes("api key was rejected")) return s.apiKeyRejected;
   if (text.includes("credit") || text.includes("quota") || text.includes("rate limit")) {
-    return `That account cannot make requests right now.\n\n${message}`;
+    return `${s.accountCannotRequest}\n\n${message}`;
   }
 
   return message;

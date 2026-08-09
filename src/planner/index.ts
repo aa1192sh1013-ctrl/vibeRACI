@@ -72,7 +72,7 @@ export async function createPlan(
       notes.push(
         `${provider.label}: ${
           error instanceof ProviderError
-            ? explainProviderFailure(provider.id, error.message)
+            ? explainProviderFailure(provider.id, error.message, answers.locale)
             : error instanceof Error
               ? error.message
               : String(error)

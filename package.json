@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "description": "Turn your app idea into an AI coding team: who does what, in what order, with copy-paste prompts for Claude Code and Codex.",
   "license": "MIT",
+  "author": "Sunhong Min",
+  "keywords": [
+    "claude-code",
+    "codex",
+    "ai-agents",
+    "scaffolding",
+    "vibe-coding",
+    "cli"
+  ],
   "type": "module",
   "bin": {
     "viberaci": "./dist/cli/index.js"

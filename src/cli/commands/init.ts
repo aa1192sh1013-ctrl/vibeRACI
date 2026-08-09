@@ -13,6 +13,7 @@
 import { createInterface } from "node:readline/promises";
 import { resolve } from "node:path";
 import type { Locale, ToolId } from "../../core/schema.js";
+import { strings } from "../../core/strings.js";
 import type { Answers } from "../../planner/answers.js";
 import { detectAll } from "../../planner/capabilities.js";
 import { createPlan } from "../../planner/index.js";
@@ -32,33 +33,25 @@ export interface InitOptions {
   interactive?: boolean;
 }
 
-const GOAL_CHOICES: { key: string; value: Answers["goal"]; label: string }[] = [
-  { key: "1", value: "demo", label: "Just something to look at" },
-  { key: "2", value: "mvp", label: "Something that actually works" },
-  { key: "3", value: "deploy", label: "Something other people can use online" },
-];
-
 export async function runInit(options: InitOptions = {}): Promise<void> {
   const dir = resolve(options.dir ?? process.cwd());
+  const s = strings(options.locale ?? "en");
 
   if (isProjectDir(dir)) {
-    throw new FriendlyError(
-      "There is already a vibeRACI project in this folder.",
-      "Run  viberaci status  to see it, or start somewhere else.",
-    );
+    throw new FriendlyError(s.alreadyAProject, s.alreadyAProjectHint);
   }
 
   const answers = await collectAnswers(options);
 
   const tools = availableTools();
   if (tools.length === 0) {
-    warn("Neither Claude Code nor Codex is usable on this computer.");
-    say(dim("  Run  viberaci doctor  to see why."));
-    say(dim("  Carrying on anyway: you will get a general plan rather than one about your idea."));
+    warn(s.noToolsUsable);
+    say(dim(`  ${s.noToolsHint}`));
+    say(dim(`  ${s.carryingOnAnyway}`));
   }
 
-  heading("Working out your team");
-  say(dim("This takes a minute. It is one request to your own coding tool."));
+  heading(s.workingOutTeam);
+  say(dim(s.planningTakesAMinute));
 
   const result = await createPlan({ ...answers, tools: tools.length > 0 ? tools : ["claude-code"] });
   for (const note of result.notes) {
@@ -79,29 +72,26 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
   try {
     const report = scaffoldProject(plan, dir);
     say();
-    ok(`${report.created.length} files created`);
+    ok(s.filesCreated(report.created.length));
   } catch (error) {
     if (error instanceof ScaffoldConflictError) {
-      throw new FriendlyError(
-        "This folder already has files with those names, so nothing was written.",
-        "Start in an empty folder instead.",
-      );
+      throw new FriendlyError(s.folderNotEmpty, s.folderNotEmptyHint);
     }
     throw error;
   }
 
   const git = initGitRepo(dir);
-  if (git.initialised) ok("git started, so you can undo anything later");
+  if (git.initialised) ok(s.gitStarted);
 
   say();
-  say(`  ${dim("your build order is in")} ${cyan("START-HERE.md")}`);
+  say(`  ${dim(s.buildOrderIn(cyan("START-HERE.md")))}`);
 
-  runNext(openProject(dir));
+  runNext(openProject(dir, plan.meta.locale));
 }
 
 /** Only tools that are genuinely here. See the note at the top of this file. */
 function availableTools(): ToolId[] {
-  const found = detectAll();
+  const found = detectAll(process.env);
   const tools: ToolId[] = [];
   if (found.find((c) => c.id === "claude-cli")?.status !== "not-installed") tools.push("claude-code");
   if (found.find((c) => c.id === "codex-cli")?.status === "ready") tools.push("codex");
@@ -110,6 +100,7 @@ function availableTools(): ToolId[] {
 
 async function collectAnswers(options: InitOptions): Promise<Omit<Answers, "tools">> {
   const locale = options.locale ?? "en";
+  const s = strings(locale);
 
   if (options.idea && !options.interactive) {
     return {
@@ -120,21 +111,27 @@ async function collectAnswers(options: InitOptions): Promise<Omit<Answers, "tool
     };
   }
 
+  const goals: { key: string; value: Answers["goal"]; label: string }[] = [
+    { key: "1", value: "demo", label: s.goalDemo },
+    { key: "2", value: "mvp", label: s.goalMvp },
+    { key: "3", value: "deploy", label: s.goalDeploy },
+  ];
+
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {
     let idea = options.idea ?? "";
     while (idea.trim().length === 0) {
       say();
-      say(bold("What do you want to build?"));
-      say(dim("  A sentence or two is plenty. Plain words are fine."));
+      say(bold(s.askIdea));
+      say(dim(`  ${s.askIdeaHint}`));
       idea = await rl.question("> ");
     }
 
     say();
-    say(bold("How far do you want to take it?"));
-    for (const choice of GOAL_CHOICES) say(`  ${choice.key}. ${choice.label}`);
+    say(bold(s.askGoal));
+    for (const choice of goals) say(`  ${choice.key}. ${choice.label}`);
     const picked = (await rl.question("> ")).trim();
-    const goal = GOAL_CHOICES.find((c) => c.key === picked)?.value ?? options.goal ?? "mvp";
+    const goal = goals.find((c) => c.key === picked)?.value ?? options.goal ?? "mvp";
 
     return { idea: idea.trim(), goal, experience: options.experience ?? "none", locale };
   } finally {

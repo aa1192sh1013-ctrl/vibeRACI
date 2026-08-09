@@ -13,41 +13,46 @@ an order, and writes the prompt you paste into each session.
 It does not write your code. Claude Code and Codex do that, and you drive them —
 that part is the point, not a limitation.
 
-## Status
-
-Early development. Not usable yet.
-
-| Milestone | What it covers | State |
-| --- | --- | --- |
-| M0 | Verify the whole idea is technically possible | done |
-| M1 | Plan schema and the file renderers | done |
-| M2 | Write a real project scaffold to disk | done |
-| M3 | Turn an idea into a plan | done |
-| M4 | Guided step-by-step runbook commands | done |
-| M5 | Public release | next |
-
-## Using it
-
 ```bash
-viberaci doctor                        # is this computer ready?
-viberaci init "a site for my recipes"  # plan it and set it up
-viberaci next                          # what to do right now
-viberaci done                          # tick that off, show what is next
-viberaci status                        # the whole plan and where you are
+npx viberaci doctor                        # is this computer ready?
+npx viberaci init "a site for my recipes"  # plan it and set it up
+npx viberaci next                          # what to do right now
+npx viberaci done                          # tick that off, show what is next
 ```
 
+## What you get
+
+`init` writes a real project folder:
+
+```
+my-project/
+├── START-HERE.md          your build order, in plain language
+├── CLAUDE.md              what every agent should know
+├── AGENTS.md              the same, for Codex
+├── .agents/
+│   ├── ui.md              one role's standing brief
+│   ├── prompts/*.md       what you copy and paste
+│   ├── settings/*.json    optional hard limits for Claude Code
+│   └── ownership.json     who owns which files
+└── .viberaci/plan.json    the plan everything above is rendered from
+```
+
+There is a complete sample in [`examples/generated/`](examples/generated) —
+committed so you can read the real output without installing anything. Start
+with [START-HERE.md](examples/generated/START-HERE.md).
+
+## How it works
+
 `next` shows one step and one thing to do about it. `next --copy` puts the
-prompt straight on your clipboard so you can paste it into Claude Code or Codex.
+prompt straight on your clipboard.
 
 Steps say who does them. Most are for an agent; some are yours — opening the app
 and clicking through it is something no coding agent can do, so the plan hands
-those back to you instead of pretending.
+those back to you instead of pretending otherwise.
 
-Add `--lang ko` to `init` to get the plan and the guidance in Korean.
+Language follows your operating system. `--lang ko` forces Korean.
 
-## How it fits together
-
-One `plan.json` is the single source of truth. Every file a user ever sees is a
+One `plan.json` is the single source of truth. Every file a user sees is a
 deterministic render of it:
 
 ```
@@ -58,38 +63,45 @@ idea ──► plan.json ──┬──► START-HERE.md          the human's r
                      └──► .agents/settings/*     optional hard limits
 ```
 
-## Try it
+The plan is validated before anything is written: at most five roles, no two
+roles owning the same path, shared paths that explain themselves, no role
+without a step, no work assigned to a tool you do not have.
+
+## Planning without an API key
+
+vibeRACI asks whichever coding tool you already installed, so there is usually
+nothing to sign up for and nothing to pay:
+
+1. your local `claude` command
+2. your local `codex` command
+3. `ANTHROPIC_API_KEY`, if you have one
+4. rules only — a general plan, and it says so rather than pretending
+
+`viberaci doctor` reports which of these actually work on your machine. It looks
+rather than asking, because "do you have Claude Code?" gets a confident yes from
+people whose command line has never been logged in.
+
+## Status
+
+Early but usable. Milestones M0–M5 are done; see the git history for what each
+one settled and what it got wrong first.
+
+Not built yet: analysing an existing repository, automatic handoffs between
+agents, conflict detection, and the environment setup wizard.
+
+## Development
 
 ```bash
 npm install
 npm test
+npm run build
+
+npm run render:example       # regenerate examples/generated (should be no diff)
+npm run plan -- "an idea"    # real planning run against your own tools
 ```
 
-See the generated files on their own:
-
-```bash
-npm run render:example              # or: npm run render:example -- ko
-```
-
-Or build a whole example project you can open and work in:
-
-```bash
-npm run scaffold:example -- ./my-test-project ko
-```
-
-Scaffolding only ever writes inside the folder you name. It never deletes
-anything, refuses rather than overwriting a file you changed, and does nothing
-at all on a second run when the plan has not changed.
-
-Or go end to end from an idea, using whichever AI tool your machine has:
-
-```bash
-npm run plan -- "a site where neighbours give away things they no longer need" ko ./giveaway
-```
-
-You need Claude Code or Codex installed and logged in, or an
-`ANTHROPIC_API_KEY`. With none of them it still builds a project, from rules
-rather than from your idea, and tells you that is what happened.
+No runtime dependencies beyond `zod`. Argument parsing, colour, prompting and
+clipboard access are all small enough to read in place.
 
 ## License
 

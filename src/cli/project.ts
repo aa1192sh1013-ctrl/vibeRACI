@@ -9,7 +9,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { ZodError } from "zod";
-import { type Plan, parsePlan } from "../core/schema.js";
+import { type Locale, type Plan, parsePlan } from "../core/schema.js";
+import { strings } from "../core/strings.js";
 import { PLAN_PATH, type Progress, isProjectDir, loadProgress } from "../progress/progress.js";
 
 export class FriendlyError extends Error {
@@ -28,14 +29,12 @@ export interface OpenedProject {
   progress: Progress;
 }
 
-export function openProject(dir = process.cwd()): OpenedProject {
+export function openProject(dir = process.cwd(), locale: Locale = "en"): OpenedProject {
   const root = resolve(dir);
 
   if (!isProjectDir(root)) {
-    throw new FriendlyError(
-      "This folder is not a vibeRACI project yet.",
-      'Make one here with:  viberaci init "what you want to build"',
-    );
+    const s = strings(locale);
+    throw new FriendlyError(s.notAProject, s.notAProjectHint);
   }
 
   let plan: Plan;

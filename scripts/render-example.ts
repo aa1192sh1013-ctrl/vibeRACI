@@ -1,12 +1,16 @@
 /**
- * Renders the bundled example plan into `.render-out/` so you can read the
- * real output with your own eyes.
+ * Renders the bundled example plan into `examples/generated/`.
  *
  *   npm run render:example
  *   npm run render:example -- ko
  *
- * This is a look-at-it helper, not the CLI. Writing into a user's project is
- * a separate job with separate care (M2).
+ * That output is committed on purpose: somebody browsing this repository on
+ * GitHub should be able to see what the tool actually produces without
+ * installing anything. Re-running this is how you check it has not drifted --
+ * if the diff is not empty, the committed sample is stale.
+ *
+ * This is a look-at-it helper, not the CLI. Writing into a user's project is a
+ * separate job with separate care (see src/scaffold).
  */
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -16,7 +20,7 @@ import { type Locale, localeSchema, parsePlan } from "../src/core/schema.js";
 import { renderAll } from "../src/render/index.js";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const outDir = join(root, ".render-out");
+const outDir = join(root, "examples", "generated");
 
 const requested = process.argv[2];
 const locale: Locale | undefined = requested ? localeSchema.parse(requested) : undefined;

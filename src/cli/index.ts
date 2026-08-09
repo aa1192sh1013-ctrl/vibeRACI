@@ -8,8 +8,8 @@
  *
  * Every path out of here ends with the user knowing the next command to type.
  */
-import { localeSchema } from "../core/schema.js";
 import type { Answers } from "../planner/answers.js";
+import { resolveLocale } from "./locale.js";
 import { runDoctor } from "./commands/doctor.js";
 import { runDone, runUndo } from "./commands/done.js";
 import { runInit } from "./commands/init.js";
@@ -68,14 +68,16 @@ function parseArgs(argv: string[]): ParsedArgs {
 
 async function main(argv: string[]): Promise<number> {
   const { command, positional, flags } = parseArgs(argv);
+  // Falls back to the operating system's language, so a Korean beginner is not
+  // required to discover a flag before being spoken to in Korean.
+  const locale = resolveLocale(flags.get("lang"));
 
   switch (command) {
     case "init": {
-      const rawLocale = flags.get("lang");
       const rawGoal = flags.get("goal");
       await runInit({
         idea: positional.join(" ") || undefined,
-        locale: typeof rawLocale === "string" ? localeSchema.parse(rawLocale) : undefined,
+        locale,
         goal: typeof rawGoal === "string" ? (rawGoal as Answers["goal"]) : undefined,
         interactive: flags.has("ask"),
       });
@@ -83,23 +85,26 @@ async function main(argv: string[]): Promise<number> {
     }
 
     case "next":
-      runNext(openProject(), { copy: flags.has("copy"), show: flags.has("show") });
+      runNext(openProject(process.cwd(), locale), {
+        copy: flags.has("copy"),
+        show: flags.has("show"),
+      });
       return 0;
 
     case "done":
-      runDone(openProject(), positional[0]);
+      runDone(openProject(process.cwd(), locale), positional[0]);
       return 0;
 
     case "undo":
-      runUndo(openProject(), positional[0]);
+      runUndo(openProject(process.cwd(), locale), positional[0]);
       return 0;
 
     case "status":
-      runStatus(openProject());
+      runStatus(openProject(process.cwd(), locale));
       return 0;
 
     case "doctor":
-      return runDoctor();
+      return runDoctor(locale);
 
     case "help":
     case "--help":

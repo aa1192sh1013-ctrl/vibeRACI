@@ -9,22 +9,25 @@
  * So every line here ends in something to do, never in an error code.
  */
 import { spawnSync } from "node:child_process";
+import type { Locale } from "../../core/schema.js";
+import { strings } from "../../core/strings.js";
 import { detectAll } from "../../planner/capabilities.js";
 import { dim, heading, ok, problem, say, warn } from "../ui.js";
 
-export function runDoctor(): number {
-  heading("Checking your computer");
+export function runDoctor(locale: Locale = "en"): number {
+  const s = strings(locale);
+  heading(s.checkingComputer);
 
   let usable = 0;
 
-  for (const tool of detectAll()) {
+  for (const tool of detectAll(process.env, locale)) {
     if (tool.status === "ready") {
-      ok(`${tool.label}: ready`);
+      ok(s.toolReady(tool.label));
       usable++;
     } else if (tool.status === "unknown") {
       // Claude has no free way to test its login, so this stays honest rather
       // than guessing. It counts as usable; a real failure explains itself later.
-      ok(`${tool.label}: installed`);
+      ok(s.toolInstalled(tool.label));
       say(dim(`  ${tool.detail}`));
       usable++;
     } else {
@@ -35,34 +38,34 @@ export function runDoctor(): number {
 
   const git = spawnSync("git", ["--version"], { encoding: "utf8", windowsHide: true });
   if (git.error || git.status !== 0) {
-    warn("git: not installed. Your project will still work, but nothing will be saved as you go.");
+    warn(s.gitMissing);
   } else {
     const name = spawnSync("git", ["config", "--get", "user.name"], { encoding: "utf8", windowsHide: true });
     const email = spawnSync("git", ["config", "--get", "user.email"], { encoding: "utf8", windowsHide: true });
     if (name.stdout.trim() && email.stdout.trim()) {
-      ok("git: ready");
+      ok(s.gitReady);
     } else {
       // Committing fails with a wall of text if git does not know who you are.
-      warn("git: installed, but it does not know your name and email yet.");
+      warn(s.gitNoIdentity);
       say(dim('  git config --global user.name "Your Name"'));
       say(dim('  git config --global user.email "you@example.com"'));
     }
   }
 
   const major = Number(process.versions.node.split(".")[0]);
-  if (major >= 20) ok(`Node ${process.versions.node}: ready`);
-  else warn(`Node ${process.versions.node} is older than vibeRACI needs. Install Node 20 or newer.`);
+  if (major >= 20) ok(s.nodeReady(process.versions.node));
+  else warn(s.nodeTooOld(process.versions.node));
 
   say();
   if (usable === 0) {
-    problem("No AI coding tool is usable, so vibeRACI cannot plan your project properly.");
-    say(dim("  Fix one of the warnings above, then run  viberaci doctor  again."));
+    problem(s.noToolAtAll);
+    say(dim(`  ${s.runDoctorAgain}`));
     say();
     return 1;
   }
 
-  ok("You are ready to build.");
-  say(dim('  viberaci init "what you want to build"'));
+  ok(s.readyToBuild);
+  say(dim(`  ${s.initExample}`));
   say();
   return 0;
 }
