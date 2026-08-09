@@ -41,6 +41,14 @@ export interface Strings {
   yourTurn: string;
   whenFinishedHuman: string;
   allDone: string;
+  // CLI wording that sits directly beside translated text on the `next` screen,
+  // where switching language mid-sentence is most obvious.
+  orCopyToClipboard: (command: string) => string;
+  alreadyOnClipboard: string;
+  copyBetweenLines: string;
+  clipboardUnavailable: string;
+  thenRun: string;
+  whatToDoNow: string;
   // project docs
   claudeMdIntro: string;
   agentsMdIntro: string;
@@ -90,6 +98,12 @@ const en: Strings = {
   whenFinishedHuman:
     "Tick everything off, then move to the next step. If something is wrong, say what you saw when you start the next agent.",
   allDone: "That is the whole plan. Your project should now run.",
+  orCopyToClipboard: (command) => `or run ${command} to put it on your clipboard`,
+  alreadyOnClipboard: "Paste. The prompt is already on your clipboard.",
+  copyBetweenLines: "Copy everything between the lines below and paste it in.",
+  clipboardUnavailable: "Could not reach the clipboard, so copy it from the file instead.",
+  thenRun: "then run:",
+  whatToDoNow: "what to do now:",
   claudeMdIntro:
     "Project guidance for Claude Code. Every agent working in this repository reads this file.",
   agentsMdIntro: "Project guidance for Codex. Every agent working in this repository reads this file.",
@@ -140,6 +154,12 @@ const ko: Strings = {
   whenFinishedHuman:
     "전부 확인되면 다음 단계로 가세요. 이상한 점이 있으면, 다음 AI를 시작할 때 무엇을 봤는지 알려주세요.",
   allDone: "여기까지가 전부입니다. 이제 프로젝트가 돌아갈 겁니다.",
+  orCopyToClipboard: (command) => `또는 ${command} 를 실행하면 클립보드에 복사됩니다`,
+  alreadyOnClipboard: "붙여넣으세요. 지시문은 이미 클립보드에 들어가 있습니다.",
+  copyBetweenLines: "아래 선 사이의 내용을 전부 복사해서 붙여넣으세요.",
+  clipboardUnavailable: "클립보드에 접근하지 못했습니다. 파일에서 직접 복사하세요.",
+  thenRun: "다음 실행:",
+  whatToDoNow: "지금 할 일:",
   claudeMdIntro:
     "Claude Code를 위한 프로젝트 안내입니다. 이 저장소에서 일하는 모든 에이전트가 이 파일을 읽습니다.",
   agentsMdIntro: "Codex를 위한 프로젝트 안내입니다. 이 저장소에서 일하는 모든 에이전트가 이 파일을 읽습니다.",

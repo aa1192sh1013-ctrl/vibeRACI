@@ -23,8 +23,27 @@ Early development. Not usable yet.
 | M1 | Plan schema and the file renderers | done |
 | M2 | Write a real project scaffold to disk | done |
 | M3 | Turn an idea into a plan | done |
-| M4 | Guided step-by-step runbook commands | next |
-| M5 | Public release | |
+| M4 | Guided step-by-step runbook commands | done |
+| M5 | Public release | next |
+
+## Using it
+
+```bash
+viberaci doctor                        # is this computer ready?
+viberaci init "a site for my recipes"  # plan it and set it up
+viberaci next                          # what to do right now
+viberaci done                          # tick that off, show what is next
+viberaci status                        # the whole plan and where you are
+```
+
+`next` shows one step and one thing to do about it. `next --copy` puts the
+prompt straight on your clipboard so you can paste it into Claude Code or Codex.
+
+Steps say who does them. Most are for an agent; some are yours — opening the app
+and clicking through it is something no coding agent can do, so the plan hands
+those back to you instead of pretending.
+
+Add `--lang ko` to `init` to get the plan and the guidance in Korean.
 
 ## How it fits together
 
