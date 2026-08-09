@@ -88,7 +88,7 @@ export async function createPlan(
   }
 
   notes.push(
-    "Built a general-purpose plan without using AI. It will work, but it does not know the details of your idea -- you can edit .viberaci/plan.json and run again.",
+    "Built a general-purpose plan without using AI. It will work, but it does not know the details of your idea -- you can edit .vibecrew/plan.json and run again.",
   );
   return {
     plan: assemblePlan(answers, buildTemplateOutput(answers), now),

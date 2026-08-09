@@ -1,5 +1,5 @@
 /**
- * `viberaci status` -- where am I?
+ * `vibecrew status` -- where am I?
  *
  * The whole list, with one line each and a clear marker for where the user is.
  * A beginner who has been away for a week should be able to read this and know
@@ -34,6 +34,6 @@ export function runStatus({ plan, progress }: OpenedProject): void {
 
   say();
   if (isComplete(plan, progress)) ok(s.allDone);
-  else say(`  ${dim(s.whatToDoNow)}  ${bold("viberaci next")}`);
+  else say(`  ${dim(s.whatToDoNow)}  ${bold("vibecrew next")}`);
   say();
 }

@@ -1,5 +1,5 @@
 /**
- * `viberaci done` -- tick the current step off and show the next one.
+ * `vibecrew done` -- tick the current step off and show the next one.
  *
  * Ticking off and showing what follows are one action, not two. The moment
  * after finishing something is exactly when a beginner needs to be told what
@@ -21,7 +21,7 @@ export function runDone(project: OpenedProject, stepId?: string): void {
   if (stepId && !target) {
     throw new FriendlyError(
       `There is no step called "${stepId}" in this plan.`,
-      "Run  viberaci status  to see the steps and their names.",
+      "Run  vibecrew status  to see the steps and their names.",
     );
   }
   if (!target) {
@@ -40,7 +40,7 @@ export function runDone(project: OpenedProject, stepId?: string): void {
   runNext({ ...project, progress: updated });
 }
 
-/** `viberaci undo` -- for the tick that was pressed a moment too early. */
+/** `vibecrew undo` -- for the tick that was pressed a moment too early. */
 export function runUndo(project: OpenedProject, stepId?: string): void {
   const { plan, progress, dir } = project;
 
@@ -50,7 +50,7 @@ export function runUndo(project: OpenedProject, stepId?: string): void {
   if (!target) {
     throw new FriendlyError(
       "Nothing has been ticked off yet, so there is nothing to undo.",
-      "Run  viberaci next  to see what to do first.",
+      "Run  vibecrew next  to see what to do first.",
     );
   }
 

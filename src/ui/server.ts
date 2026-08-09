@@ -1,5 +1,5 @@
 /**
- * The little server behind `viberaci ui`.
+ * The little server behind `vibecrew ui`.
  *
  * It writes files and can spend money on a planning request, so it is locked
  * down rather than left open on a port:
@@ -95,7 +95,7 @@ async function handle(
   }
 
   if (url.searchParams.get("t") !== ctx.secret) {
-    send(res, 403, { error: "wrong or missing key -- open the link vibeRACI printed" });
+    send(res, 403, { error: "wrong or missing key -- open the link vibecrew printed" });
     return;
   }
 

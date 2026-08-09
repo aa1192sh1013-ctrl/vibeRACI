@@ -1,20 +1,20 @@
 # Does splitting the work actually help?
 
-vibeRACI's premise is that a beginner is better off running a small team of AI
+vibecrew's premise is that a beginner is better off running a small team of AI
 roles than one session. That is a claim, so it was tested. Twice. It has not
 held up, and this page says so.
 
 Both trials: Claude Sonnet 5 on each side, identical tools
 (`Read,Write,Edit,Glob,Grep`), identical turn budget, agents restricted to
 writing files so neither side could run or test anything. One arm got a single
-session and the plain idea. The other got the vibeRACI prompts in plan order,
+session and the plain idea. The other got the vibecrew prompts in plan order,
 each a fresh session that had never seen the others' code.
 
 Measures were fixed before the results were looked at.
 
 ## Trial 1 — shared task board, 2 roles
 
-| | one session | vibeRACI team |
+| | one session | vibecrew team |
 | --- | --- | --- |
 | sessions | 1 | 3 |
 | time / cost | 85s / $0.36 | 192s / $0.99 |
@@ -29,7 +29,7 @@ discriminate.
 
 Accounts, seat booking, an organiser view, a real database.
 
-| | one session | vibeRACI team |
+| | one session | vibecrew team |
 | --- | --- | --- |
 | sessions | 1 | 4 (3 agent, 1 human) |
 | time / cost | 289s / $1.36 | 404s / $1.84 |
@@ -44,7 +44,7 @@ Both shipped a working, internally consistent app with every requirement met.
 
 **The "a team writes better code" claim has failed twice.** On the measures that
 can be checked mechanically, one session did just as well and cost less. Anyone
-choosing vibeRACI for code quality is choosing it on a promise this project
+choosing vibecrew for code quality is choosing it on a promise this project
 cannot currently support.
 
 Two things are worth putting next to that.

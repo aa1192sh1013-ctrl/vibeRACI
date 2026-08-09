@@ -12,7 +12,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 export function withNeutralCwd<T>(run: (cwd: string) => T): T {
-  const dir = mkdtempSync(join(tmpdir(), "viberaci-plan-"));
+  const dir = mkdtempSync(join(tmpdir(), "vibecrew-plan-"));
   try {
     return run(dir);
   } finally {

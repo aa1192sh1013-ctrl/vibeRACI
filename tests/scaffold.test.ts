@@ -13,7 +13,7 @@ const plan = parsePlan(raw);
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "viberaci-test-"));
+  dir = mkdtempSync(join(tmpdir(), "vibecrew-test-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });
@@ -27,7 +27,7 @@ describe("what a new project contains", () => {
     expect(paths).toContain("START-HERE.md");
     expect(paths).toContain("README.md");
     expect(paths).toContain(".gitignore");
-    expect(paths).toContain(".viberaci/plan.json");
+    expect(paths).toContain(".vibecrew/plan.json");
     expect(paths).toContain(".agents/prompts/build-ui.md");
   });
 
@@ -49,7 +49,7 @@ describe("what a new project contains", () => {
   });
 
   it("saves a plan that can be read back and re-validated", () => {
-    const saved = planWorkspace(plan).files.find((f) => f.path === ".viberaci/plan.json");
+    const saved = planWorkspace(plan).files.find((f) => f.path === ".vibecrew/plan.json");
     expect(safeParsePlan(JSON.parse(saved?.content ?? "{}")).success).toBe(true);
   });
 });

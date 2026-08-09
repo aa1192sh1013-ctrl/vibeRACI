@@ -24,7 +24,7 @@ export function planWorkspace(plan: Plan): Workspace {
     { path: ".gitignore", content: renderGitignore(plan) },
     // The plan travels with the project. Later commands read it back, and a
     // user who wants to change the team edits this and re-generates.
-    { path: ".viberaci/plan.json", content: `${JSON.stringify(plan, null, 2)}\n` },
+    { path: ".vibecrew/plan.json", content: `${JSON.stringify(plan, null, 2)}\n` },
   ];
 
   for (const entry of plan.scaffold) {

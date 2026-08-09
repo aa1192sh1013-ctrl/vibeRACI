@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The `viberaci` command.
+ * The `vibecrew` command.
  *
  * Argument parsing is hand-rolled. There are six commands and four flags; a
  * parser library would be more code to read than the thing it parses, and this
@@ -19,22 +19,44 @@ import { runUi } from "./commands/ui.js";
 import { FriendlyError, openProject } from "./project.js";
 import { bold, cyan, dim, problem, say } from "./ui.js";
 
-const HELP = `${bold("viberaci")} - build your AI coding team
+/**
+ * Columns are computed rather than typed out. Hand-counted padding drifts the
+ * moment a command is renamed, and a ragged help screen is the first thing a
+ * new user sees.
+ */
+function twoColumns(rows: [string, string][], colour: (text: string) => string): string {
+  const width = Math.max(...rows.map(([left]) => left.length));
+  return rows
+    .map(([left, right]) => `  ${colour(left)}${" ".repeat(width - left.length)}   ${right}`)
+    .join("\n");
+}
 
-  ${cyan("viberaci ui")}                            do all of this in your browser
-  ${cyan("viberaci init")} ${dim('"what you want to build"')}   plan a project and set it up
-  ${dim("viberaci init")}                           ${dim("(no idea given: it asks you)")}
-  ${cyan("viberaci next")}                          what to do right now
-  ${cyan("viberaci done")}                          tick that off, show what is next
-  ${cyan("viberaci status")}                        the whole plan and where you are
-  ${cyan("viberaci undo")}                          untick the last step
-  ${cyan("viberaci doctor")}                        check this computer is ready
+const HELP = `${bold("vibecrew")} - build your AI coding team
+
+${twoColumns(
+  [
+    ["vibecrew ui", "do all of this in your browser"],
+    ['vibecrew init "what you want to build"', "plan a project and set it up"],
+    ["vibecrew init", dim("(no idea given: it asks you)")],
+    ["vibecrew next", "what to do right now"],
+    ["vibecrew done", "tick that off, show what is next"],
+    ["vibecrew status", "the whole plan and where you are"],
+    ["vibecrew undo", "untick the last step"],
+    ["vibecrew doctor", "check this computer is ready"],
+  ],
+  cyan,
+)}
 
 ${dim("flags")}
-  --copy          put the prompt straight on your clipboard   ${dim("(next)")}
-  --show          print the prompt here instead of a path     ${dim("(next)")}
-  --lang ko       write the plan in Korean                    ${dim("(init)")}
-  --goal demo|mvp|deploy                                      ${dim("(init)")}
+${twoColumns(
+  [
+    ["--copy", `put the prompt straight on your clipboard   ${dim("(next)")}`],
+    ["--show", `print the prompt here instead of a path     ${dim("(next)")}`],
+    ["--lang ko", `write the plan in Korean                    ${dim("(init)")}`],
+    ["--goal demo|mvp|deploy", dim("(init)")],
+  ],
+  (text) => text,
+)}
 `;
 
 interface ParsedArgs {

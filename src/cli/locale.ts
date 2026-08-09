@@ -15,7 +15,7 @@ export function resolveLocale(explicit?: string | true): Locale {
     if (parsed.success) return parsed.data;
   }
 
-  const fromEnv = process.env.VIBERACI_LANG;
+  const fromEnv = process.env.VIBECREW_LANG;
   if (fromEnv) {
     const parsed = localeSchema.safeParse(fromEnv.split(/[-_]/)[0]);
     if (parsed.success) return parsed.data;

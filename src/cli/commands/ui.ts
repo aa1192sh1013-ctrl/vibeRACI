@@ -1,5 +1,5 @@
 /**
- * `viberaci ui` -- the same thing, in a browser.
+ * `vibecrew ui` -- the same thing, in a browser.
  *
  * Exists because the people this is for find a terminal frightening, and the
  * one screen that matters -- "here is your step, here is the button that copies

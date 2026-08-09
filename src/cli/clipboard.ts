@@ -24,7 +24,7 @@ interface Copier {
  * UTF-8 file and Set-Clipboard is longer but actually pastes what was copied.
  */
 function copyOnWindows(text: string): boolean {
-  const dir = mkdtempSync(join(tmpdir(), "viberaci-clip-"));
+  const dir = mkdtempSync(join(tmpdir(), "vibecrew-clip-"));
   const file = join(dir, "prompt.txt");
   try {
     writeFileSync(file, text, "utf8");
