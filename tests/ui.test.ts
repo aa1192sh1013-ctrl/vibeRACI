@@ -7,7 +7,7 @@ import { parsePlan } from "../src/core/schema.js";
 import { loadProgress, markDone, saveProgress } from "../src/progress/progress.js";
 import { scaffoldProject } from "../src/scaffold/write.js";
 import { startUiServer, type UiServer } from "../src/ui/server.js";
-import { buildState } from "../src/ui/state.js";
+import { type UiState, buildState } from "../src/ui/state.js";
 
 const examplePath = fileURLToPath(new URL("../examples/marketplace.plan.json", import.meta.url));
 const plan = parsePlan(JSON.parse(readFileSync(examplePath, "utf8")));
@@ -37,6 +37,26 @@ const post = (path: string, body: unknown, init: RequestInit = {}) =>
     body: JSON.stringify(body),
     ...init,
   });
+
+/**
+ * `Response.json()` is typed as `unknown`, so say what these endpoints return
+ * rather than leaning on `any` -- a test that cannot describe its own subject
+ * is not checking much.
+ */
+async function stateNow(): Promise<UiState> {
+  return (await (await get("/api/state")).json()) as UiState;
+}
+
+async function postForState(path: string, body: unknown): Promise<UiState> {
+  const payload = (await (await post(path, body)).json()) as { state: UiState };
+  return payload.state;
+}
+
+/** The project half of the state, for tests that have already scaffolded one. */
+function project(state: UiState): NonNullable<UiState["project"]> {
+  if (!state.project) throw new Error("expected a project in this folder");
+  return state.project;
+}
 
 describe("keeping the local server to itself", () => {
   it("listens only on the loopback address", () => {
@@ -74,7 +94,7 @@ describe("keeping the local server to itself", () => {
 
 describe("what the page is told", () => {
   it("reports an empty folder as having no project", async () => {
-    const state = await (await get("/api/state")).json();
+    const state = await stateNow();
     expect(state.hasProject).toBe(false);
     expect(state.project).toBeUndefined();
     expect(Array.isArray(state.tools)).toBe(true);
@@ -89,20 +109,19 @@ describe("what the page is told", () => {
 
   it("describes a scaffolded project, with the first step current", async () => {
     scaffoldProject(plan, dir);
-    const state = await (await get("/api/state")).json();
-    expect(state.hasProject).toBe(true);
-    expect(state.project.name).toBe(plan.meta.projectName);
-    expect(state.project.steps).toHaveLength(plan.steps.length);
-    expect(state.project.current.number).toBe(1);
-    expect(state.project.finished).toBe(false);
+    const p = project(await stateNow());
+    expect(p.name).toBe(plan.meta.projectName);
+    expect(p.steps).toHaveLength(plan.steps.length);
+    expect(p.current?.number).toBe(1);
+    expect(p.finished).toBe(false);
   });
 
   it("hands over the prompt text so the copy button has something to copy", async () => {
     scaffoldProject(plan, dir);
-    const state = await (await get("/api/state")).json();
-    expect(state.project.current.kind).toBe("agent");
-    expect(state.project.current.prompt).toContain("Architect");
-    expect(state.project.current.tool).toBe("Claude Code");
+    const current = project(await stateNow()).current;
+    expect(current?.kind).toBe("agent");
+    expect(current?.prompt).toContain("Architect");
+    expect(current?.tool).toBe("Claude Code");
   });
 
   it("offers no prompt on a step the user does themselves", () => {
@@ -126,22 +145,22 @@ describe("ticking steps off from the page", () => {
   });
 
   it("advances to the next step and says so", async () => {
-    const before = await (await get("/api/state")).json();
-    const after = await (await post("/api/done", { stepId: before.project.current.id })).json();
-    expect(after.state.project.current.number).toBe(2);
+    const first = project(await stateNow()).current;
+    const after = await postForState("/api/done", { stepId: first?.id });
+    expect(project(after).current?.number).toBe(2);
   });
 
   it("writes the tick to disk, so the command line agrees", async () => {
-    const before = await (await get("/api/state")).json();
-    await post("/api/done", { stepId: before.project.current.id });
-    expect(loadProgress(dir, plan).completed).toEqual([before.project.current.id]);
+    const first = project(await stateNow()).current;
+    await post("/api/done", { stepId: first?.id });
+    expect(loadProgress(dir, plan).completed).toEqual([first?.id]);
   });
 
   it("puts a step back when asked", async () => {
-    const before = await (await get("/api/state")).json();
-    await post("/api/done", { stepId: before.project.current.id });
-    const after = await (await post("/api/undo", {})).json();
-    expect(after.state.project.current.number).toBe(1);
+    const first = project(await stateNow()).current;
+    await post("/api/done", { stepId: first?.id });
+    const after = await postForState("/api/undo", {});
+    expect(project(after).current?.number).toBe(1);
   });
 
   it("refuses to plan with nothing to plan from", async () => {
