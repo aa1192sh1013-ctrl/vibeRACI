@@ -124,8 +124,20 @@ npm run render:example       # regenerate examples/generated (should be no diff)
 npm run plan -- "an idea"    # real planning run against your own tools
 ```
 
-No runtime dependencies beyond `zod`. Argument parsing, colour, prompting and
-clipboard access are all small enough to read in place.
+No runtime dependencies beyond `zod`. Argument parsing, colour, prompting,
+clipboard access and the browser page are all small enough to read in place.
+
+### Releasing
+
+```bash
+npm version 0.2.0
+git push --follow-tags
+```
+
+The tag starts [`.github/workflows/publish.yml`](.github/workflows/publish.yml),
+which publishes through npm's trusted publishing. There is no token anywhere:
+GitHub proves to npm which workflow is running, and npm decides whether to
+believe it.
 
 ## License
 

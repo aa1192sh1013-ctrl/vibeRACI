@@ -1,0 +1,50 @@
+# Publishes to npm without a token.
+#
+# GitHub proves to npm that this workflow, in this repository, is running --
+# so there is no secret to store, leak, or forget to rotate. The account's own
+# 2FA is not involved either, which is the point: the first release of this
+# package needed a bypass-2FA token, and npm is retiring those.
+#
+# Setup, done once on npmjs.com under the package's Settings:
+#   Publisher:  GitHub Actions
+#   Repository: aa1192sh1013-ctrl/vibeRACI
+#   Workflow:   publish.yml
+#
+# To release:
+#   npm version 0.2.0        bumps package.json, commits, and tags v0.2.0
+#   git push --follow-tags   pushes both, which starts this workflow
+name: Publish to npm
+
+on:
+  push:
+    tags: ["v*"]
+  # A button in the Actions tab, for a release that needs no new tag.
+  workflow_dispatch:
+
+permissions:
+  # Lets GitHub mint the identity token npm checks. Without it publishing fails.
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          # Trusted publishing needs Node 22.14+ and npm 11.5.1+.
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          # A cache can serve a stale dependency into a release. Never here.
+          package-manager-cache: false
+
+      - run: npm ci
+
+      # The same checks that guard every commit. A release that cannot pass
+      # them is a release that should not happen.
+      - run: npm run typecheck
+      - run: npm test
+
+      - run: npm publish
