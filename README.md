@@ -18,11 +18,13 @@ session. That was tested twice and did not hold up — see
 [docs/experiments.md](docs/experiments.md) for the numbers, including the ones
 that went against it.
 
+Make an empty folder, open a terminal in it, and run:
+
 ```bash
 npx vibesquad ui       # everything below, in your browser
 ```
 
-Or from the terminal, if you prefer:
+Or stay in the terminal, if you prefer:
 
 ```bash
 npx vibesquad doctor                        # is this computer ready?
@@ -30,6 +32,32 @@ npx vibesquad init "a site for my recipes"  # plan it and set it up
 npx vibesquad next                          # what to do right now
 npx vibesquad done                          # tick that off, show what is next
 ```
+
+## Before you start
+
+**You need Node.js 20 or newer.** `npx` comes with it, so without Node the
+commands above do not exist at all. Check by running:
+
+```bash
+node -v
+```
+
+If that prints something like `v22.14.0`, you are set. If it says the command
+is not found, install Node from [nodejs.org](https://nodejs.org) — take the
+version it offers you — then **close your terminal and open a new one**, or it
+will keep saying the command is not found.
+
+Everything else, `vibesquad doctor` checks for you and tells you how to fix.
+You do not have to work it out in advance:
+
+- **Claude Code or Codex**, in their command-line form and signed in. Without
+  one you still get a project, but the plan will be a general one rather than
+  one about your idea — and vibesquad says so rather than pretending.
+- **git**, optional. Without it your project still works; you just have no
+  undo.
+
+A folder on your desktop or in your documents is fine. Avoid the very top of
+your C: drive on Windows, where writing sometimes needs administrator rights.
 
 ## What you get
 
