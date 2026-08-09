@@ -16,6 +16,7 @@
  * failure is interpreted then.
  */
 import { spawnSync } from "node:child_process";
+import { resolveLauncher } from "../core/executable.js";
 import type { Locale } from "../core/schema.js";
 import { strings } from "../core/strings.js";
 
@@ -32,7 +33,12 @@ export interface ToolCapability {
 }
 
 function run(command: string, args: string[]) {
-  return spawnSync(command, args, {
+  // Resolved rather than named: Windows would otherwise land on a shim it
+  // cannot execute and report an installed tool as missing.
+  const launcher = resolveLauncher(command);
+  if (!launcher) return { error: new Error("not on PATH"), status: null, stdout: "" } as const;
+
+  return spawnSync(launcher.command, [...launcher.prefixArgs, ...args], {
     encoding: "utf8",
     timeout: 15_000,
     windowsHide: true,

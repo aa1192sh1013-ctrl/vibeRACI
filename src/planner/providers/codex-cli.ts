@@ -17,6 +17,7 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { resolveLauncher } from "../../core/executable.js";
 import { DEFAULT_TIMEOUT_MS, type CompletionRequest, type Provider, ProviderError } from "./types.js";
 import { withNeutralCwd } from "./neutral-cwd.js";
 
@@ -43,9 +44,13 @@ export function createCodexCliProvider(outputSchema?: Record<string, unknown>): 
           schemaArgs.push("--output-schema", schemaFile);
         }
 
+        const launcher = resolveLauncher("codex");
+        if (!launcher) throw new ProviderError("codex-cli", "could not run codex: not on PATH");
+
         const run = spawnSync(
-          "codex",
+          launcher.command,
           [
+            ...launcher.prefixArgs,
             "exec",
             "--skip-git-repo-check",
             "--sandbox",

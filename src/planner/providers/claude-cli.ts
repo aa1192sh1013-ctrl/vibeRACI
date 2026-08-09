@@ -9,6 +9,7 @@
  * app. Detecting that is `capabilities.ts`'s job; reporting it clearly is ours.
  */
 import { spawnSync } from "node:child_process";
+import { resolveLauncher } from "../../core/executable.js";
 import { DEFAULT_TIMEOUT_MS, type CompletionRequest, type Provider, ProviderError } from "./types.js";
 import { withNeutralCwd } from "./neutral-cwd.js";
 
@@ -30,9 +31,15 @@ export function createClaudeCliProvider(model = DEFAULT_CLAUDE_MODEL): Provider 
     label: "Claude Code",
     async complete(request: CompletionRequest): Promise<string> {
       return withNeutralCwd((cwd) => {
+        // Claude is usually a real executable, but it can be an npm shim too,
+        // and those need resolving on Windows. See core/executable.ts.
+        const launcher = resolveLauncher("claude");
+        if (!launcher) throw new ProviderError("claude-cli", "could not run claude: not on PATH");
+
         const run = spawnSync(
-          "claude",
+          launcher.command,
           [
+            ...launcher.prefixArgs,
             "-p",
             request.user,
             "--output-format",

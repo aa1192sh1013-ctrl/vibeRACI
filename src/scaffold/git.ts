@@ -12,6 +12,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { resolveLauncher } from "../core/executable.js";
 
 export interface GitReport {
   /** Whether `git` could be run at all. */
@@ -29,7 +30,14 @@ export interface GitReport {
 }
 
 function git(args: string[], cwd?: string) {
-  return spawnSync("git", args, { cwd, encoding: "utf8", windowsHide: true });
+  // Resolved for the same reason the coding tools are: see core/executable.ts.
+  const launcher = resolveLauncher("git");
+  if (!launcher) return { error: new Error("not on PATH"), status: null, stdout: "", stderr: "" } as const;
+  return spawnSync(launcher.command, [...launcher.prefixArgs, ...args], {
+    cwd,
+    encoding: "utf8",
+    windowsHide: true,
+  });
 }
 
 export function initGitRepo(targetDir: string): GitReport {
