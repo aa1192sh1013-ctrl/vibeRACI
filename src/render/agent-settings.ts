@@ -11,7 +11,7 @@
  *
  * IMPORTANT: this is generated as a bonus, never depended on. The M0 spike
  * could not verify it end to end, and Codex's equivalent sandbox was outright
- * broken on the test machine. vibecrew must keep working correctly when this
+ * broken on the test machine. vibesquad must keep working correctly when this
  * file does nothing at all, and must never tell the user they are protected.
  */
 import type { Plan, Role } from "../core/schema.js";

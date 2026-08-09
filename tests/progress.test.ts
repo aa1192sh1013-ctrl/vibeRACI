@@ -27,7 +27,7 @@ const plan = parsePlan(raw);
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "vibecrew-progress-"));
+  dir = mkdtempSync(join(tmpdir(), "vibesquad-progress-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });
@@ -104,7 +104,7 @@ describe("the progress file", () => {
   });
 
   it("starts fresh rather than crashing on a damaged file", () => {
-    mkdirSync(join(dir, ".vibecrew"), { recursive: true });
+    mkdirSync(join(dir, ".vibesquad"), { recursive: true });
     writeFileSync(join(dir, PROGRESS_PATH), "{ this is not json", "utf8");
     expect(() => loadProgress(dir, plan)).not.toThrow();
     expect(loadProgress(dir, plan).completed).toEqual([]);
@@ -132,10 +132,10 @@ describe("the commands", () => {
   });
 
   it("refuses politely outside a project, and says how to make one", () => {
-    const elsewhere = mkdtempSync(join(tmpdir(), "vibecrew-empty-"));
+    const elsewhere = mkdtempSync(join(tmpdir(), "vibesquad-empty-"));
     try {
       expect(() => openProject(elsewhere)).toThrow(FriendlyError);
-      expect(() => openProject(elsewhere)).toThrow(/not a vibecrew project/);
+      expect(() => openProject(elsewhere)).toThrow(/not a vibesquad project/);
     } finally {
       rmSync(elsewhere, { recursive: true, force: true });
     }
@@ -145,7 +145,7 @@ describe("the commands", () => {
     const out = captured(() => runNext(openProject(dir)));
     expect(out).toContain("Plan the structure");
     expect(out).toContain(".agents/prompts/plan-structure.md");
-    expect(out).toContain("vibecrew done");
+    expect(out).toContain("vibesquad done");
   });
 
   it("next names no tool and offers no prompt on the user's own step", () => {

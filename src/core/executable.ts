@@ -4,7 +4,7 @@
  * Node launches programs without a shell, which on Windows means PATHEXT is
  * never applied. Asking for `codex` finds the extensionless shell script npm
  * writes for Git Bash, Windows cannot execute it, and the launch fails exactly
- * as if the tool were not installed -- so vibecrew told a user with Codex
+ * as if the tool were not installed -- so vibesquad told a user with Codex
  * installed and logged in that they did not have it, and planned around a tool
  * they were never offered.
  *

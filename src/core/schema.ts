@@ -1,5 +1,5 @@
 /**
- * The single source of truth for a vibecrew project.
+ * The single source of truth for a vibesquad project.
  *
  * Everything the user ever sees -- CLAUDE.md, AGENTS.md, agent charters, the
  * copy-paste prompts, the runbook -- is a deterministic render of one Plan.
@@ -15,7 +15,7 @@ import { z } from "zod";
 export const localeSchema = z.enum(["en", "ko"]);
 export type Locale = z.infer<typeof localeSchema>;
 
-/** Coding agents vibecrew knows how to write instructions for. */
+/** Coding agents vibesquad knows how to write instructions for. */
 export const toolIdSchema = z.enum(["claude-code", "codex"]);
 export type ToolId = z.infer<typeof toolIdSchema>;
 

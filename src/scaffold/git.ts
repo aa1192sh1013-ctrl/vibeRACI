@@ -1,7 +1,7 @@
 /**
  * Starting a git repository for the generated project.
  *
- * Kept deliberately small. vibecrew initialises a repository and stops -- it
+ * Kept deliberately small. vibesquad initialises a repository and stops -- it
  * does not stage, commit, or touch remotes. Beginners lose work to tools that
  * run git commands they did not understand, and the first commit is a fine
  * thing for a person to make themselves.

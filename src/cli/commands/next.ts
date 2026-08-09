@@ -1,5 +1,5 @@
 /**
- * `vibecrew next` -- what do I do right now?
+ * `vibesquad next` -- what do I do right now?
  *
  * The most important screen in the product. It shows exactly one step and
  * exactly one thing to do about it. Everything else the user might want --
@@ -29,7 +29,7 @@ export function runNext(project: OpenedProject, options: NextOptions = {}): void
   if (isComplete(plan, progress)) {
     say();
     ok(s.allDone);
-    say(dim("  vibecrew status  shows everything you did."));
+    say(dim("  vibesquad status  shows everything you did."));
     say();
     return;
   }
@@ -68,7 +68,7 @@ export function runNext(project: OpenedProject, options: NextOptions = {}): void
       }
     } else {
       numberedLine(2, s.copyPromptFrom(promptPath(step)));
-      say(`     ${dim(s.orCopyToClipboard(cyan("vibecrew next --copy")))}`);
+      say(`     ${dim(s.orCopyToClipboard(cyan("vibesquad next --copy")))}`);
     }
   }
 
@@ -78,6 +78,6 @@ export function runNext(project: OpenedProject, options: NextOptions = {}): void
 
   say();
   say(dim(step.kind === "human" ? s.whenFinishedHuman : s.whenFinished));
-  say(`  ${dim(s.thenRun)}  ${cyan("vibecrew done")}`);
+  say(`  ${dim(s.thenRun)}  ${cyan("vibesquad done")}`);
   say();
 }

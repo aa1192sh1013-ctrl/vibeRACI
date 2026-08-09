@@ -4,10 +4,10 @@ import { explainProviderFailure } from "../src/planner/capabilities.js";
 import { resolveLocale } from "../src/cli/locale.js";
 import { strings } from "../src/core/strings.js";
 
-const originalLang = process.env.VIBECREW_LANG;
+const originalLang = process.env.VIBESQUAD_LANG;
 afterEach(() => {
-  if (originalLang === undefined) delete process.env.VIBECREW_LANG;
-  else process.env.VIBECREW_LANG = originalLang;
+  if (originalLang === undefined) delete process.env.VIBESQUAD_LANG;
+  else process.env.VIBESQUAD_LANG = originalLang;
 });
 
 describe("choosing a language", () => {
@@ -19,22 +19,22 @@ describe("choosing a language", () => {
   it("falls back rather than failing on a language it does not have", () => {
     // Being addressed in the wrong language is an annoyance; an error before
     // the tool even starts is a dead end.
-    delete process.env.VIBECREW_LANG;
+    delete process.env.VIBESQUAD_LANG;
     expect(["en", "ko"]).toContain(resolveLocale("fr"));
   });
 
   it("reads the environment when no flag is given", () => {
-    process.env.VIBECREW_LANG = "ko";
+    process.env.VIBESQUAD_LANG = "ko";
     expect(resolveLocale()).toBe("ko");
   });
 
   it("accepts a full locale tag, not just a bare language", () => {
-    process.env.VIBECREW_LANG = "ko-KR";
+    process.env.VIBESQUAD_LANG = "ko-KR";
     expect(resolveLocale()).toBe("ko");
   });
 
   it("lets the flag beat the environment", () => {
-    process.env.VIBECREW_LANG = "ko";
+    process.env.VIBESQUAD_LANG = "ko";
     expect(resolveLocale("en")).toBe("en");
   });
 });

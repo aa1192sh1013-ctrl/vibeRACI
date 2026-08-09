@@ -1,4 +1,4 @@
-# vibecrew
+# vibesquad
 
 **Who does what, for your AI coding team.**
 
@@ -6,7 +6,7 @@ You have an app idea and you have Claude Code or Codex. The hard part is not
 getting AI to write code — it already does that well. The hard part is knowing
 what to ask for, in what order, and what to do once it says it is finished.
 
-vibecrew gives you that: a small team of AI roles, a build order, the prompt to
+vibesquad gives you that: a small team of AI roles, a build order, the prompt to
 paste at each step, and a runbook that always tells you the next thing to do.
 You are never staring at a folder of files wondering what happens now.
 
@@ -19,16 +19,16 @@ session. That was tested twice and did not hold up — see
 that went against it.
 
 ```bash
-npx vibecrew ui       # everything below, in your browser
+npx vibesquad ui       # everything below, in your browser
 ```
 
 Or from the terminal, if you prefer:
 
 ```bash
-npx vibecrew doctor                        # is this computer ready?
-npx vibecrew init "a site for my recipes"  # plan it and set it up
-npx vibecrew next                          # what to do right now
-npx vibecrew done                          # tick that off, show what is next
+npx vibesquad doctor                        # is this computer ready?
+npx vibesquad init "a site for my recipes"  # plan it and set it up
+npx vibesquad next                          # what to do right now
+npx vibesquad done                          # tick that off, show what is next
 ```
 
 ## What you get
@@ -45,7 +45,7 @@ my-project/
 │   ├── prompts/*.md       what you copy and paste
 │   ├── settings/*.json    optional hard limits for Claude Code
 │   └── ownership.json     who owns which files
-└── .vibecrew/plan.json    the plan everything above is rendered from
+└── .vibesquad/plan.json    the plan everything above is rendered from
 ```
 
 There is a complete sample in [`examples/generated/`](examples/generated) —
@@ -54,7 +54,7 @@ with [START-HERE.md](examples/generated/START-HERE.md).
 
 ## How it works
 
-`vibecrew ui` opens a local page: it checks your computer, takes your idea, and
+`vibesquad ui` opens a local page: it checks your computer, takes your idea, and
 then shows one step at a time with a button that copies the prompt. Nothing
 leaves your machine — the page is served on 127.0.0.1, needs a key printed in
 your terminal, and refuses requests from anywhere else.
@@ -85,7 +85,7 @@ without a step, no work assigned to a tool you do not have.
 
 ## Planning without an API key
 
-vibecrew asks whichever coding tool you already installed, so there is usually
+vibesquad asks whichever coding tool you already installed, so there is usually
 nothing to sign up for and nothing to pay:
 
 1. your local `claude` command
@@ -93,7 +93,7 @@ nothing to sign up for and nothing to pay:
 3. `ANTHROPIC_API_KEY`, if you have one
 4. rules only — a general plan, and it says so rather than pretending
 
-`vibecrew doctor` reports which of these actually work on your machine. It looks
+`vibesquad doctor` reports which of these actually work on your machine. It looks
 rather than asking, because "do you have Claude Code?" gets a confident yes from
 people whose command line has never been logged in.
 

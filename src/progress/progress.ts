@@ -1,7 +1,7 @@
 /**
  * Where the user is in their plan.
  *
- * Kept in `.vibecrew/progress.json`, separate from the plan and gitignored.
+ * Kept in `.vibesquad/progress.json`, separate from the plan and gitignored.
  * The plan is what to build and does not change while you work through it;
  * progress is personal, changes constantly, and would otherwise turn every
  * finished step into a commit and every teammate into a merge conflict.
@@ -16,8 +16,8 @@ import { z } from "zod";
 import type { Plan, Step } from "../core/schema.js";
 import { orderedSteps } from "../render/shared.js";
 
-export const PROGRESS_PATH = ".vibecrew/progress.json";
-export const PLAN_PATH = ".vibecrew/plan.json";
+export const PROGRESS_PATH = ".vibesquad/progress.json";
+export const PLAN_PATH = ".vibesquad/plan.json";
 
 export const progressSchema = z.object({
   schemaVersion: z.literal(1),

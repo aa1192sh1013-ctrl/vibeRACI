@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The `vibecrew` command.
+ * The `vibesquad` command.
  *
  * Argument parsing is hand-rolled. There are six commands and four flags; a
  * parser library would be more code to read than the thing it parses, and this
@@ -31,18 +31,18 @@ function twoColumns(rows: [string, string][], colour: (text: string) => string):
     .join("\n");
 }
 
-const HELP = `${bold("vibecrew")} - build your AI coding team
+const HELP = `${bold("vibesquad")} - build your AI coding team
 
 ${twoColumns(
   [
-    ["vibecrew ui", "do all of this in your browser"],
-    ['vibecrew init "what you want to build"', "plan a project and set it up"],
-    ["vibecrew init", dim("(no idea given: it asks you)")],
-    ["vibecrew next", "what to do right now"],
-    ["vibecrew done", "tick that off, show what is next"],
-    ["vibecrew status", "the whole plan and where you are"],
-    ["vibecrew undo", "untick the last step"],
-    ["vibecrew doctor", "check this computer is ready"],
+    ["vibesquad ui", "do all of this in your browser"],
+    ['vibesquad init "what you want to build"', "plan a project and set it up"],
+    ["vibesquad init", dim("(no idea given: it asks you)")],
+    ["vibesquad next", "what to do right now"],
+    ["vibesquad done", "tick that off, show what is next"],
+    ["vibesquad status", "the whole plan and where you are"],
+    ["vibesquad undo", "untick the last step"],
+    ["vibesquad doctor", "check this computer is ready"],
   ],
   cyan,
 )}

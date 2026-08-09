@@ -6,7 +6,7 @@ import { findExecutable, resolveLauncher } from "../src/core/executable.js";
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "vibecrew-path-"));
+  dir = mkdtempSync(join(tmpdir(), "vibesquad-path-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });

@@ -18,7 +18,7 @@ let base: string;
 let secret: string;
 
 beforeEach(async () => {
-  dir = mkdtempSync(join(tmpdir(), "vibecrew-ui-"));
+  dir = mkdtempSync(join(tmpdir(), "vibesquad-ui-"));
   server = await startUiServer({ dir, locale: "en" });
   base = `http://127.0.0.1:${server.port}`;
   secret = new URL(server.url).searchParams.get("t") ?? "";

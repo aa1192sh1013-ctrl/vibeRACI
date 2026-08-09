@@ -35,7 +35,7 @@ export function renderGitignore(plan: Plan): string {
     lines.push("", "# Local database files", "*.db", "*.db-journal", "*.sqlite", "*.sqlite3");
   }
 
-  lines.push("", "# vibecrew keeps your plan here; the progress file is local only", ".vibecrew/progress.json");
+  lines.push("", "# vibesquad keeps your plan here; the progress file is local only", ".vibesquad/progress.json");
 
   return `${lines.join("\n")}\n`;
 }

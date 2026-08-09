@@ -1,5 +1,5 @@
 /**
- * `vibecrew doctor` -- is this computer ready?
+ * `vibesquad doctor` -- is this computer ready?
  *
  * Promoted into the MVP by the M0 spike, which found two things a beginner
  * could never diagnose: a Claude Code CLI that had never been logged in on a

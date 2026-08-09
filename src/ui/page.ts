@@ -50,7 +50,7 @@ export function renderPage(locale: Locale, secret: string): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(s.uiTitle)} · vibecrew</title>
+<title>${escapeHtml(s.uiTitle)} · vibesquad</title>
 <style>
   :root {
     --bg: #f7f6f3; --card: #fff; --ink: #1c1b19; --muted: #6b6862;

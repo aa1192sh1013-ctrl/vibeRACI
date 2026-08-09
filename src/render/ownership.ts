@@ -34,7 +34,7 @@ export function renderOwnership(plan: Plan): string {
   }
 
   return `${JSON.stringify(
-    { schemaVersion: plan.schemaVersion, generatedBy: "vibecrew", agents },
+    { schemaVersion: plan.schemaVersion, generatedBy: "vibesquad", agents },
     null,
     2,
   )}\n`;

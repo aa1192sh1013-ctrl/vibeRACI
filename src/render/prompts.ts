@@ -3,7 +3,7 @@
  *
  * This is the product's real output. Everything else is supporting material,
  * so this file gets the most care: it must stand completely on its own,
- * because the agent receiving it has no memory of vibecrew and no idea what
+ * because the agent receiving it has no memory of vibesquad and no idea what
  * a "plan" is.
  */
 import type { Plan, Step } from "../core/schema.js";

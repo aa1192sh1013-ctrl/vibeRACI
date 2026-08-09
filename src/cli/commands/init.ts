@@ -1,5 +1,5 @@
 /**
- * `vibecrew init` -- idea in, project on disk.
+ * `vibesquad init` -- idea in, project on disk.
  *
  * Four questions is the whole interview, and three of them have a sensible
  * default. The target user abandons forms; every extra question costs more

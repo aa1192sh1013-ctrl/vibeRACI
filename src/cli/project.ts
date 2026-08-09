@@ -1,9 +1,9 @@
 /**
- * Opening a vibecrew project from disk.
+ * Opening a vibesquad project from disk.
  *
  * Every failure here is one a beginner will hit, so each carries the thing to
  * do about it rather than the exception that caused it. "No such file
- * .vibecrew/plan.json" is true and useless; "you are not in a project folder,
+ * .vibesquad/plan.json" is true and useless; "you are not in a project folder,
  * here is how to make one" is what they need.
  */
 import { readFileSync } from "node:fs";
@@ -46,12 +46,12 @@ export function openProject(dir = process.cwd(), locale: Locale = "en"): OpenedP
         `${PLAN_PATH} has something wrong with it:\n${error.issues
           .map((i) => `  - ${i.path.join(".")}: ${i.message}`)
           .join("\n")}`,
-        "If you edited it by hand, undo that change. Otherwise run vibecrew init again in a new folder.",
+        "If you edited it by hand, undo that change. Otherwise run vibesquad init again in a new folder.",
       );
     }
     throw new FriendlyError(
       `Could not read ${PLAN_PATH}.`,
-      "The file may be damaged. Run vibecrew init again in a new folder.",
+      "The file may be damaged. Run vibesquad init again in a new folder.",
     );
   }
 
