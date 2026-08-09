@@ -1,6 +1,6 @@
 {
   "name": "viberaci",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Turn your app idea into an AI coding team: who does what, in what order, with copy-paste prompts for Claude Code and Codex.",
   "license": "MIT",
   "author": "Sunhong Min",
