@@ -1,6 +1,6 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { delimiter, dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { findExecutable, resolveLauncher } from "../src/core/executable.js";
 
@@ -57,7 +57,8 @@ describe("finding a command on Windows", () => {
     const second = join(dir, "second");
     mkdirSync(second);
     writeFileSync(join(second, "tool.cmd"), "", "utf8");
-    const env = { PATH: [dir, second].join(delimiter), PATHEXT: ".CMD" };
+    // Windows separates PATH with ";" whatever platform this test runs on.
+    const env = { PATH: [dir, second].join(";"), PATHEXT: ".CMD" };
     expectPath(findExecutable("tool", env, "win32"), join(second, "tool.cmd"));
   });
 
@@ -77,6 +78,13 @@ describe("finding a command on Windows", () => {
 });
 
 describe("finding a command everywhere else", () => {
+  it("matches a lowercase file against an uppercase PATHEXT", () => {
+    // Windows does not care about case, so trying only the declared spelling
+    // worked there by accident. A case-sensitive filesystem finds nothing.
+    writeFileSync(join(dir, "tool.cmd"), "", "utf8");
+    expect(findExecutable("tool", { PATH: dir, PATHEXT: ".CMD" }, "win32")).toBeDefined();
+  });
+
   it("leaves the name alone, because the runtime resolves it correctly", () => {
     expect(findExecutable("codex", { PATH: "/usr/bin" }, "linux")).toBe("codex");
     expect(findExecutable("codex", { PATH: "/usr/bin" }, "darwin")).toBe("codex");

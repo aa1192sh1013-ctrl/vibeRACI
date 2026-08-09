@@ -23,13 +23,20 @@ export function findExecutable(
   // Everywhere else, the runtime resolves PATH correctly on its own.
   if (platform !== "win32") return name;
 
-  const paths = (env.PATH ?? env.Path ?? "").split(delimiter).filter(Boolean);
-  const extensions = (env.PATHEXT ?? ".COM;.EXE;.BAT;.CMD")
+  // PATH is separated by ";" on Windows regardless of what this runtime's own
+  // platform uses, since a Windows PATH entry ("C:\...") contains a colon.
+  const paths = (env.PATH ?? env.Path ?? "").split(platform === "win32" ? ";" : delimiter);
+  const declared = (env.PATHEXT ?? ".COM;.EXE;.BAT;.CMD")
     .split(";")
     .map((ext) => ext.trim())
     .filter(Boolean);
 
-  for (const dir of paths) {
+  // PATHEXT is conventionally uppercase while the files themselves are usually
+  // lowercase. Windows does not care, but a case-sensitive filesystem does, and
+  // matching only the declared case means working by accident.
+  const extensions = [...new Set(declared.flatMap((ext) => [ext, ext.toLowerCase()]))];
+
+  for (const dir of paths.filter(Boolean)) {
     for (const extension of extensions) {
       const candidate = join(dir, name + extension);
       if (existsSync(candidate)) return candidate;
