@@ -22,9 +22,11 @@
   ],
   "type": "module",
   "bin": {
-    "viberaci": "./dist/cli/index.js"
+    "viberaci": "dist/cli/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=20"
   },
