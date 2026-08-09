@@ -55,6 +55,21 @@ describe("speaking the chosen language everywhere", () => {
     expect(korean).toContain("Claude 앱");
   });
 
+  it("does not tell someone who uses the app that they have nothing", () => {
+    // Reported by a user watching the page call Codex missing while Codex was
+    // open in front of them. The desktop app and the command line are separate
+    // installs, and only one of them can be driven headlessly -- saying "not
+    // installed" is the same believable-and-wrong answer M0 found for Claude.
+    for (const locale of ["en", "ko"] as const) {
+      const s = strings(locale);
+      expect(s.codexMissing, locale).toMatch(/ChatGPT/);
+      expect(s.claudeMissing, locale).toMatch(/앱|app/i);
+    }
+    // And the fix has to be the actual command, not "go install it".
+    expect(strings("en").codexMissingFix).toContain("npm install -g @openai/codex");
+    expect(strings("ko").codexMissingFix).toContain("npm install -g @openai/codex");
+  });
+
   it("has every string in both languages", () => {
     const en = strings("en");
     const ko = strings("ko");

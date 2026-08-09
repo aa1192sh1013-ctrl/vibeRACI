@@ -210,12 +210,15 @@ const en: Strings = {
   readyToBuild: "You are ready to build.",
   initExample: 'viberaci init "what you want to build"',
   apiKeyLabel: "your Anthropic API key",
-  claudeMissing: "Claude Code is not installed, or your terminal cannot find it.",
-  claudeMissingFix: "Install Claude Code, then close and reopen your terminal.",
+  claudeMissing:
+    "No command-line Claude Code here. Being signed in to the Claude app is not the same thing -- vibeRACI drives the one your terminal can run.",
+  claudeMissingFix:
+    "Install Claude Code, then close and reopen your terminal so `claude` is found.",
   claudeLoginUnknown:
     "Claude Code is installed. Whether it is logged in is checked when it is used.",
-  codexMissing: "Codex is not installed, or your terminal cannot find it.",
-  codexMissingFix: "Install Codex, then close and reopen your terminal.",
+  codexMissing:
+    "No command-line Codex here. Codex inside the ChatGPT app is a different thing -- vibeRACI drives the one your terminal can run.",
+  codexMissingFix: "Install it with:  npm install -g @openai/codex",
   codexLoggedIn: "Logged in.",
   codexNotLoggedIn: "Codex is installed but not logged in.",
   codexNotLoggedInFix: "Run: codex login",
@@ -344,11 +347,14 @@ const ko: Strings = {
   readyToBuild: "이제 만들 준비가 됐습니다.",
   initExample: 'viberaci init "만들고 싶은 것"',
   apiKeyLabel: "내 Anthropic API 키",
-  claudeMissing: "Claude Code가 설치되지 않았거나, 터미널이 찾지 못합니다.",
-  claudeMissingFix: "Claude Code를 설치한 뒤 터미널을 닫았다 다시 여세요.",
+  claudeMissing:
+    "터미널에서 쓸 수 있는 Claude Code가 없습니다. Claude 앱에 로그인한 것과는 별개입니다 — vibeRACI는 터미널이 실행할 수 있는 쪽을 씁니다.",
+  claudeMissingFix:
+    "Claude Code를 설치한 뒤 터미널을 닫았다 다시 여세요. `claude` 명령이 잡혀야 합니다.",
   claudeLoginUnknown: "Claude Code가 설치돼 있습니다. 로그인 여부는 실제로 쓸 때 확인합니다.",
-  codexMissing: "Codex가 설치되지 않았거나, 터미널이 찾지 못합니다.",
-  codexMissingFix: "Codex를 설치한 뒤 터미널을 닫았다 다시 여세요.",
+  codexMissing:
+    "터미널에서 쓸 수 있는 Codex가 없습니다. ChatGPT 앱 안의 Codex는 다른 물건입니다 — vibeRACI는 터미널이 실행할 수 있는 쪽을 씁니다.",
+  codexMissingFix: "이 명령으로 설치하세요:  npm install -g @openai/codex",
   codexLoggedIn: "로그인됨.",
   codexNotLoggedIn: "Codex가 설치돼 있지만 로그인이 안 돼 있습니다.",
   codexNotLoggedInFix: "실행하세요: codex login",
