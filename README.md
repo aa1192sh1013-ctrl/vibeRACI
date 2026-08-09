@@ -2,16 +2,21 @@
 
 **Who does what, for your AI coding team.**
 
-You have an app idea and you have Claude Code or Codex. What you do not have is
-any idea how many sessions to open, what to put in each one, or how to stop two
-of them from rewriting each other's work.
+You have an app idea and you have Claude Code or Codex. The hard part is not
+getting AI to write code — it already does that well. The hard part is knowing
+what to ask for, in what order, and what to do once it says it is finished.
 
-vibeRACI answers that. You describe what you want to build; it works out a small
-team of AI roles, decides which files each one is allowed to touch, puts them in
-an order, and writes the prompt you paste into each session.
+vibeRACI gives you that: a small team of AI roles, a build order, the prompt to
+paste at each step, and a runbook that always tells you the next thing to do.
+You are never staring at a folder of files wondering what happens now.
 
 It does not write your code. Claude Code and Codex do that, and you drive them —
 that part is the point, not a limitation.
+
+**What it does not claim:** that splitting the work produces better code than one
+session. That was tested twice and did not hold up — see
+[docs/experiments.md](docs/experiments.md) for the numbers, including the ones
+that went against it.
 
 ```bash
 npx viberaci doctor                        # is this computer ready?
@@ -85,6 +90,14 @@ people whose command line has never been logged in.
 
 Early but usable. Milestones M0–M5 are done; see the git history for what each
 one settled and what it got wrong first.
+
+What you can rely on today: a plan that validates before anything is written, a
+folder you can start working in, a prompt for every step, design notes written
+before the features, and a command that always answers "what now?".
+
+What is unproven: that any of this makes the resulting code better than one
+long session would have. [docs/experiments.md](docs/experiments.md) has both
+trials, including the parts that argue against this tool.
 
 Not built yet: analysing an existing repository, automatic handoffs between
 agents, conflict detection, and the environment setup wizard.
