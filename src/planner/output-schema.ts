@@ -58,7 +58,10 @@ export const plannerOutputSchema = z.object({
     .array(
       z.object({
         id: idSchema,
-        roleId: idSchema,
+        /** "human" for anything only a person can do. See the system prompt. */
+        kind: z.enum(["agent", "human"]).default("agent"),
+        /** Required for agent steps, forbidden on human ones. */
+        roleId: idSchema.optional(),
         phase: z.number().int().min(1),
         title: z.string().min(1),
         goal: z.string().min(1),

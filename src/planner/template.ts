@@ -38,6 +38,8 @@ interface Copy {
   ui: RoleCopy;
   feature: RoleCopy;
   reviewer: RoleCopy;
+  /** The closing step the user does themselves. */
+  tryIt: Pick<RoleCopy, "title" | "goal" | "tasks" | "doneWhen">;
   sharedNote: string;
 }
 
@@ -142,6 +144,22 @@ const COPY: Record<Locale, Copy> = {
         "A written list of remaining problems exists",
       ],
     },
+    tryIt: {
+      title: "Try it yourself",
+      goal: "Open what you built and use it like a stranger would.",
+      tasks: [
+        "Start the app the way the README says",
+        "Open it in your browser",
+        "Do the main thing the app is for, start to finish",
+        "Try something silly on purpose -- an empty form, a very long word",
+        "Write down anything that looked wrong or confusing",
+      ],
+      doneWhen: [
+        "The app opens without an error",
+        "The main thing it is for works end to end",
+        "You have a written list of anything that looked wrong",
+      ],
+    },
     sharedNote:
       "Both sides use this file. Add to it, never rewrite what is already there, and say what you added when you finish.",
   },
@@ -235,6 +253,22 @@ const COPY: Record<Locale, Copy> = {
         "남은 문제 목록이 글로 정리돼 있다",
       ],
     },
+    tryIt: {
+      title: "직접 써보기",
+      goal: "만든 걸 열어서, 처음 보는 사람처럼 써봅니다.",
+      tasks: [
+        "README에 적힌 방법대로 앱을 실행하세요",
+        "브라우저에서 열어보세요",
+        "이 앱의 핵심 기능을 처음부터 끝까지 해보세요",
+        "일부러 이상한 것도 해보세요 — 빈 칸으로 제출, 아주 긴 글자",
+        "이상하거나 헷갈렸던 점을 적어두세요",
+      ],
+      doneWhen: [
+        "앱이 오류 없이 열린다",
+        "핵심 기능이 처음부터 끝까지 동작한다",
+        "이상했던 점을 글로 적어놨다",
+      ],
+    },
     sharedNote:
       "양쪽이 같이 쓰는 파일입니다. 추가만 하고, 이미 있는 내용은 절대 다시 쓰지 마세요. 끝나면 무엇을 추가했는지 알려주세요.",
   },
@@ -267,6 +301,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
     ownership.push({ glob: "docs/**", roleId: "architect", mode: "owns" });
     steps.push({
       id: "plan-structure",
+      kind: "agent",
       roleId: "architect",
       phase: phase++,
       title: copy.architect.title,
@@ -314,6 +349,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
     const backendPhase = phase++;
     steps.push({
       id: "build-backend",
+      kind: "agent",
       roleId: "feature",
       phase: backendPhase,
       title: copy.feature.title,
@@ -324,6 +360,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
     });
     steps.push({
       id: "build-ui",
+      kind: "agent",
       roleId: "ui",
       phase: backendPhase,
       title: copy.ui.title,
@@ -335,6 +372,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
   } else {
     steps.push({
       id: "build-ui",
+      kind: "agent",
       roleId: "ui",
       phase: phase++,
       title: copy.ui.title,
@@ -363,6 +401,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
 
     steps.push({
       id: "review",
+      kind: "agent",
       roleId: "reviewer",
       phase: phase++,
       title: copy.reviewer.title,
@@ -388,6 +427,7 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
     );
     steps.push({
       id: "review",
+      kind: "agent",
       roleId: "reviewer",
       phase: phase++,
       title: copy.reviewer.title,
@@ -397,6 +437,19 @@ export function buildTemplateOutput(answers: Answers): PlannerOutput {
       handoffTo: [],
     });
   }
+
+  // Every plan ends with the user opening what they built. An agent cannot do
+  // this, and a project nobody ever ran is not finished.
+  steps.push({
+    id: "try-it",
+    kind: "human",
+    phase: phase++,
+    title: copy.tryIt.title,
+    goal: copy.tryIt.goal,
+    tasks: copy.tryIt.tasks,
+    doneWhen: copy.tryIt.doneWhen,
+    handoffTo: [],
+  });
 
   return {
     projectName: copy.projectName,

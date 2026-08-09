@@ -82,8 +82,9 @@ for (const phase of phases) {
   const steps = result.plan.steps.filter((s) => s.phase === phase);
   const names = steps
     .map((s) => {
-      const role = result.plan.roles.find((r) => r.id === s.roleId);
-      return `${role?.emoji ?? ""} ${s.title}`;
+      const emoji =
+        s.kind === "human" ? "🙋" : (result.plan.roles.find((r) => r.id === s.roleId)?.emoji ?? "");
+      return `${emoji} ${s.title}`;
     })
     .join("   |   ");
   console.log(`  ${phase}. ${names}${steps.length > 1 ? "   (independent)" : ""}`);

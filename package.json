@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "render:example": "tsx scripts/render-example.ts",
+    "scaffold": "tsx scripts/scaffold-from-plan.ts",
     "scaffold:example": "tsx scripts/scaffold-example.ts",
     "plan": "tsx scripts/plan-example.ts"
   },

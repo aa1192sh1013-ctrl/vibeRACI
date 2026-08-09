@@ -177,7 +177,18 @@ describe("the plan built from rules alone", () => {
     const plan = assemblePlan(answers, buildTemplateOutput(answers));
     const paths = renderAll(plan).map((f) => f.path);
     expect(paths).toContain("START-HERE.md");
-    expect(paths.filter((p) => p.startsWith(".agents/prompts/"))).toHaveLength(plan.steps.length);
+    const agentSteps = plan.steps.filter((s) => s.kind === "agent");
+    expect(paths.filter((p) => p.startsWith(".agents/prompts/"))).toHaveLength(agentSteps.length);
+  });
+
+  it("always ends with the user opening what they built", () => {
+    // A project nobody ever ran is not finished, and no agent can run it for them.
+    for (const goal of ["demo", "mvp", "deploy"] as const) {
+      const output = buildTemplateOutput({ ...answers, goal });
+      const last = output.steps.at(-1);
+      expect(last?.kind, goal).toBe("human");
+      expect(last?.roleId, goal).toBeUndefined();
+    }
   });
 });
 

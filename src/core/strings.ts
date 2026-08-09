@@ -37,6 +37,9 @@ export interface Strings {
   howToRun: (tool: string) => string;
   copyPromptFrom: (path: string) => string;
   whenFinished: string;
+  /** Human steps: the user is the one doing it, so there is nothing to paste. */
+  yourTurn: string;
+  whenFinishedHuman: string;
   allDone: string;
   // project docs
   claudeMdIntro: string;
@@ -83,6 +86,9 @@ const en: Strings = {
   howToRun: (tool) => `Open ${tool} in this project folder.`,
   copyPromptFrom: (path) => `Copy everything in ${path} and paste it in.`,
   whenFinished: "When the agent says it is finished, check the list above, then move to the next step.",
+  yourTurn: "This one is yours. No AI for this step — a coding agent cannot open your app and look at it.",
+  whenFinishedHuman:
+    "Tick everything off, then move to the next step. If something is wrong, say what you saw when you start the next agent.",
   allDone: "That is the whole plan. Your project should now run.",
   claudeMdIntro:
     "Project guidance for Claude Code. Every agent working in this repository reads this file.",
@@ -129,6 +135,10 @@ const ko: Strings = {
   howToRun: (tool) => `이 프로젝트 폴더에서 ${tool}를 여세요.`,
   copyPromptFrom: (path) => `${path} 파일 내용을 전부 복사해서 붙여넣으세요.`,
   whenFinished: "AI가 끝났다고 하면 위 목록을 확인하고 다음 단계로 넘어가세요.",
+  yourTurn:
+    "이 단계는 직접 하셔야 합니다. AI는 앱을 열어서 눈으로 볼 수 없으니 여기엔 붙여넣을 지시문이 없습니다.",
+  whenFinishedHuman:
+    "전부 확인되면 다음 단계로 가세요. 이상한 점이 있으면, 다음 AI를 시작할 때 무엇을 봤는지 알려주세요.",
   allDone: "여기까지가 전부입니다. 이제 프로젝트가 돌아갈 겁니다.",
   claudeMdIntro:
     "Claude Code를 위한 프로젝트 안내입니다. 이 저장소에서 일하는 모든 에이전트가 이 파일을 읽습니다.",

@@ -35,11 +35,19 @@ describe("the generated file set", () => {
     `);
   });
 
-  it("writes one prompt per step and one charter per role", () => {
+  it("writes one prompt per agent step and one charter per role", () => {
     const prompts = files.filter((f) => f.path.startsWith(".agents/prompts/"));
-    expect(prompts).toHaveLength(plan.steps.length);
+    const agentSteps = plan.steps.filter((s) => s.kind === "agent");
+    expect(prompts).toHaveLength(agentSteps.length);
     const charters = plan.roles.map((r) => `.agents/${r.id}.md`);
     for (const c of charters) expect(byPath.has(c)).toBe(true);
+  });
+
+  it("writes no prompt for a step the user does themselves", () => {
+    // A prompt file for a human step is an invitation to paste it into an
+    // agent that cannot do it, which is the bug this distinction exists for.
+    expect(plan.steps.some((s) => s.kind === "human")).toBe(true);
+    expect(byPath.has(".agents/prompts/try-it.md")).toBe(false);
   });
 
   it("only emits a settings file for Claude Code roles", () => {
@@ -137,6 +145,22 @@ describe("the runbook", () => {
   it("names the tool to open for each step", () => {
     expect(runbook()).toContain("Open Claude Code in this project folder.");
     expect(runbook()).toContain("Open Codex in this project folder.");
+  });
+
+  it("tells the user which steps are theirs, and asks for no tool", () => {
+    const text = runbook();
+    // The title appears twice: once in the overview, once as the step heading.
+    // The detail section is the one after the last mention.
+    const trySection = text.slice(text.lastIndexOf("Try it yourself"));
+    expect(trySection).toContain("This one is yours");
+    expect(trySection).toContain("a coding agent cannot open your app");
+    // No tool to open and nothing to paste, so neither instruction belongs here.
+    expect(trySection).not.toContain("Open Claude Code");
+    expect(trySection).not.toContain("Copy everything in");
+  });
+
+  it("marks the user's own steps distinctly in the overview", () => {
+    expect(runbook()).toContain("🙋 Try it yourself");
   });
 
   it("keeps RACI vocabulary out of everything the user or agent reads", () => {

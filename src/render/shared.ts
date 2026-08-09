@@ -46,6 +46,19 @@ export function stepsForRole(plan: Plan, roleId: string): Step[] {
   return plan.steps.filter((s) => s.roleId === roleId);
 }
 
+/** Marks the steps the user does themselves, so they stand out in a list. */
+export const HUMAN_EMOJI = "🙋";
+
+export function stepEmoji(plan: Plan, step: Step): string {
+  if (step.kind === "human" || !step.roleId) return HUMAN_EMOJI;
+  return roleById(plan, step.roleId).emoji;
+}
+
+/** Steps a coding agent carries out, and so the only ones with a prompt. */
+export function agentSteps(plan: Plan): Step[] {
+  return plan.steps.filter((s) => s.kind === "agent");
+}
+
 /** Steps grouped by phase, phases in ascending order. */
 export function stepsByPhase(plan: Plan): { phase: number; steps: Step[] }[] {
   const phases = [...new Set(plan.steps.map((s) => s.phase))].sort((a, b) => a - b);

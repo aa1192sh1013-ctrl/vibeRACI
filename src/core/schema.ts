@@ -91,7 +91,22 @@ export type Role = z.infer<typeof roleSchema>;
 
 export const stepSchema = z.object({
   id: idSchema,
-  roleId: idSchema,
+  /**
+   * Who actually does this.
+   *
+   * `agent` becomes a prompt to paste into a coding tool. `human` is for work
+   * only a person can do -- opening the app in a browser, clicking through it,
+   * judging whether it looks right.
+   *
+   * This distinction exists because a plan once told a coding agent to "open
+   * the board in two browser tabs and refresh one of them". It cannot. It spent
+   * 87 minutes failing, then on later runs gave up faster, and never once
+   * produced anything. Checking the app is real work worth keeping in the plan;
+   * it just was never the agent's to do.
+   */
+  kind: z.enum(["agent", "human"]).default("agent"),
+  /** The agent doing the work. Absent on human steps -- there, the user acts. */
+  roleId: idSchema.optional(),
   /**
    * Steps with the same phase number have no dependency on each other.
    * We surface that as information ("these are independent"), not as an
@@ -219,9 +234,22 @@ function validatePlanIntegrity(
     if (stepIds.has(step.id)) fail(["steps", i, "id"], `duplicate step id "${step.id}"`);
     stepIds.add(step.id);
 
-    if (!roleIds.has(step.roleId)) {
-      fail(["steps", i, "roleId"], `unknown role "${step.roleId}"`);
+    if (step.kind === "agent") {
+      if (!step.roleId) {
+        fail(["steps", i, "roleId"], "an agent step needs a role to carry it out");
+      } else if (!roleIds.has(step.roleId)) {
+        fail(["steps", i, "roleId"], `unknown role "${step.roleId}"`);
+      }
+    } else if (step.roleId) {
+      // The user is the actor on a human step. Naming an agent too would put a
+      // teammate's name on work the person is being asked to do themselves.
+      fail(["steps", i, "roleId"], "a human step belongs to the user, so it takes no role");
     }
+
+    if (step.kind === "human" && step.handoffTo.length > 0) {
+      fail(["steps", i, "handoffTo"], "a human step has no agent to hand off from");
+    }
+
     step.handoffTo.forEach((h, j) => {
       if (h === step.roleId) fail(["steps", i, "handoffTo", j], "a step cannot hand off to its own role");
       else if (!roleIds.has(h)) fail(["steps", i, "handoffTo", j], `unknown role "${h}"`);

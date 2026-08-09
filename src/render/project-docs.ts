@@ -9,7 +9,7 @@
  */
 import type { Plan } from "../core/schema.js";
 import { strings, toolName } from "../core/strings.js";
-import { HEADER_MARK, bullets, charterPath, roleById, section, stepsByPhase } from "./shared.js";
+import { HEADER_MARK, bullets, charterPath, section, stepEmoji, stepsByPhase } from "./shared.js";
 
 function body(plan: Plan): string {
   const s = strings(plan.meta.locale);
@@ -24,10 +24,7 @@ function body(plan: Plan): string {
   });
 
   const order = stepsByPhase(plan).map(({ phase, steps }) => {
-    const names = steps.map((st) => {
-      const role = roleById(plan, st.roleId);
-      return `${role.emoji} ${st.title}`;
-    });
+    const names = steps.map((st) => `${stepEmoji(plan, st)} ${st.title}`);
     const note = steps.length > 1 ? `\n  ${s.independentNote}` : "";
     return `${s.phaseLabel(phase)}: ${names.join(" · ")}${note}`;
   });

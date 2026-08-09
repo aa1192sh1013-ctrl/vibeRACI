@@ -74,6 +74,34 @@ describe("integrity checks", () => {
     expectRejected(p, /without gaps/);
   });
 
+  it("rejects an agent step with nobody to carry it out", () => {
+    const p = plan();
+    p.steps[0].roleId = undefined;
+    expectRejected(p, /agent step needs a role/);
+  });
+
+  it("rejects putting a teammate's name on the user's own step", () => {
+    const p = plan();
+    const human = p.steps.find((s: any) => s.kind === "human");
+    human.roleId = "reviewer";
+    expectRejected(p, /human step belongs to the user/);
+  });
+
+  it("rejects a handoff from a step no agent performed", () => {
+    const p = plan();
+    const human = p.steps.find((s: any) => s.kind === "human");
+    human.handoffTo = ["ui"];
+    expectRejected(p, /no agent to hand off from/);
+  });
+
+  it("treats a step with no kind as agent work", () => {
+    const p = plan();
+    p.steps[0].kind = undefined;
+    const result = safeParsePlan(p);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.steps[0]?.kind).toBe("agent");
+  });
+
   it("rejects a role consulting itself", () => {
     const p = plan();
     p.roles[1].consults = ["ui"];

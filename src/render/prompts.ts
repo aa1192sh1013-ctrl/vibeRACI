@@ -11,6 +11,9 @@ import { strings } from "../core/strings.js";
 import { bullets, charterPath, mustNotModify, numbered, roleById, rulesFor, section } from "./shared.js";
 
 export function renderPrompt(plan: Plan, step: Step): string {
+  if (step.kind !== "agent" || !step.roleId) {
+    throw new Error(`step "${step.id}" is the user's own work and has no prompt`);
+  }
   const s = strings(plan.meta.locale);
   const role = roleById(plan, step.roleId);
 

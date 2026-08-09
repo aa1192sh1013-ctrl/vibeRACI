@@ -45,7 +45,11 @@ export function renderAll(plan: Plan): RenderedFile[] {
     }
   }
 
+  // Only agent steps get a prompt. A human step has nothing to paste anywhere,
+  // and writing one would invite the user to hand it to an agent that cannot
+  // do it -- the exact failure this distinction exists to prevent.
   for (const step of orderedSteps(plan)) {
+    if (step.kind !== "agent") continue;
     files.push({ path: promptPath(step), content: renderPrompt(plan, step) });
   }
 

@@ -164,6 +164,7 @@
     },
     {
       "id": "review",
+      "kind": "agent",
       "roleId": "reviewer",
       "phase": 3,
       "title": "Check the whole thing",
@@ -177,6 +178,27 @@
         "Tests exist for sign up, posting a listing, and sending a message",
         "All tests pass",
         "A written list of remaining problems exists, each one assigned to a teammate"
+      ],
+      "handoffTo": []
+    },
+    {
+      "id": "try-it",
+      "kind": "human",
+      "phase": 4,
+      "title": "Try it yourself",
+      "goal": "Open what your team built and use it the way a stranger would.",
+      "tasks": [
+        "Start the app the way the README says",
+        "Sign up as a new person and post something for sale",
+        "Open a second browser window, sign up as someone else, and message the seller",
+        "Try something silly on purpose: an empty title, a very long description",
+        "Write down anything that looked wrong or confusing"
+      ],
+      "doneWhen": [
+        "The app opens without an error",
+        "You posted a listing and saw it appear in the feed",
+        "A message you sent as one person showed up for the other",
+        "You have a written list of anything that looked wrong"
       ],
       "handoffTo": []
     }

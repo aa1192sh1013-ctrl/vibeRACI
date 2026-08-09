@@ -41,12 +41,24 @@ RULES
 5. Every role must have at least one step, or the user is never told to run it.
 6. Phases start at 1 and never skip. Steps in the same phase must not depend on
    each other. Anything that must happen first gets an earlier phase.
-7. "doneWhen" must be checkable by looking at the project -- "docs/api.md exists",
-   "a new account can be created". Never "the code is good".
-8. Write for someone who has never programmed. No jargon. Never use the words
+7. Every step is either kind "agent" or kind "human".
+   - "agent": work done by reading and writing files. Needs a roleId.
+     A coding agent cannot open a browser, click anything, look at a screen,
+     judge whether a layout is attractive, or watch two windows at once. Never
+     put that in an agent step -- one plan told an agent to "open the board in
+     two browser tabs and refresh one", and it burned 87 minutes achieving
+     nothing.
+   - "human": the user does it themselves. No roleId, no handoffTo. Use it for
+     trying the app, clicking through it, checking it looks right, or anything
+     needing eyes and judgement.
+   Finish a project with a human step so the user actually tries what they built.
+8. "doneWhen" must be checkable -- "docs/api.md exists", "a new account can be
+   created". For a human step, phrase it as what they should see on screen.
+   Never "the code is good".
+9. Write for someone who has never programmed. No jargon. Never use the words
    responsible, accountable, consulted or informed as labels. Say what a role does
    in one plain sentence: "Builds the screens people actually click on."
-9. Choose a stack a beginner can run locally without configuring anything.
+10. Choose a stack a beginner can run locally without configuring anything.
 
 SHAPE
 
