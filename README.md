@@ -19,6 +19,12 @@ session. That was tested twice and did not hold up — see
 that went against it.
 
 ```bash
+npx viberaci ui       # everything below, in your browser
+```
+
+Or from the terminal, if you prefer:
+
+```bash
 npx viberaci doctor                        # is this computer ready?
 npx viberaci init "a site for my recipes"  # plan it and set it up
 npx viberaci next                          # what to do right now
@@ -48,8 +54,13 @@ with [START-HERE.md](examples/generated/START-HERE.md).
 
 ## How it works
 
-`next` shows one step and one thing to do about it. `next --copy` puts the
-prompt straight on your clipboard.
+`viberaci ui` opens a local page: it checks your computer, takes your idea, and
+then shows one step at a time with a button that copies the prompt. Nothing
+leaves your machine — the page is served on 127.0.0.1, needs a key printed in
+your terminal, and refuses requests from anywhere else.
+
+In the terminal, `next` shows the same one step and one thing to do about it.
+`next --copy` puts the prompt straight on your clipboard.
 
 Steps say who does them. Most are for an agent; some are yours — opening the app
 and clicking through it is something no coding agent can do, so the plan hands

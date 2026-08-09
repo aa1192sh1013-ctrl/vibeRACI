@@ -100,6 +100,26 @@ export interface Strings {
   requestTimedOut: string;
   apiKeyRejected: string;
   accountCannotRequest: string;
+  // the web page
+  uiTitle: string;
+  uiSubtitle: string;
+  uiCheckingTools: string;
+  uiToolsOk: string;
+  uiToolsBad: string;
+  uiStartButton: string;
+  uiWorking: string;
+  uiCopyPrompt: string;
+  uiCopied: string;
+  uiOpenTool: (tool: string) => string;
+  uiMarkDone: string;
+  uiUndo: string;
+  uiStepOf: (n: number, total: number) => string;
+  uiFinishedTitle: string;
+  uiFinishedBody: string;
+  uiFolder: string;
+  uiIdeaPlaceholder: string;
+  uiNeedIdea: string;
+  uiSomethingWentWrong: string;
   // errors
   notAProject: string;
   notAProjectHint: string;
@@ -215,6 +235,25 @@ const en: Strings = {
   requestTimedOut: "That took too long and was stopped. Check your internet connection and try again.",
   apiKeyRejected: "That API key was rejected. Check ANTHROPIC_API_KEY for a typo or an expired key.",
   accountCannotRequest: "That account cannot make requests right now.",
+  uiTitle: "Build your AI coding team",
+  uiSubtitle: "Tell me what you want to build. I will work out who does what.",
+  uiCheckingTools: "Checking your computer",
+  uiToolsOk: "Your computer is ready.",
+  uiToolsBad: "Something needs fixing before this will work well.",
+  uiStartButton: "Build my team",
+  uiWorking: "Working out your team. This takes about a minute.",
+  uiCopyPrompt: "Copy this prompt",
+  uiCopied: "Copied — now paste it",
+  uiOpenTool: (tool) => `Open ${tool} in this folder, then paste`,
+  uiMarkDone: "Done — what is next?",
+  uiUndo: "Not done yet, undo",
+  uiStepOf: (n, total) => `Step ${n} of ${total}`,
+  uiFinishedTitle: "That is the whole plan",
+  uiFinishedBody: "Your project should now run. Open it and see.",
+  uiFolder: "Building in",
+  uiIdeaPlaceholder: "A site where I keep my recipes and search them by ingredient",
+  uiNeedIdea: "Write a sentence about what you want to build first.",
+  uiSomethingWentWrong: "That did not work.",
   notAProject: "This folder is not a vibeRACI project yet.",
   notAProjectHint: 'Make one here with:  viberaci init "what you want to build"',
   claudeMdIntro:
@@ -329,6 +368,25 @@ const ko: Strings = {
   requestTimedOut: "너무 오래 걸려서 중단했습니다. 인터넷 연결을 확인하고 다시 시도하세요.",
   apiKeyRejected: "그 API 키가 거부됐습니다. ANTHROPIC_API_KEY에 오타가 있거나 만료됐는지 확인하세요.",
   accountCannotRequest: "그 계정은 지금 요청을 보낼 수 없습니다.",
+  uiTitle: "내 AI 코딩 팀 만들기",
+  uiSubtitle: "무엇을 만들고 싶은지 알려주세요. 누가 뭘 할지 제가 정해드릴게요.",
+  uiCheckingTools: "컴퓨터 상태 확인 중",
+  uiToolsOk: "준비됐습니다.",
+  uiToolsBad: "제대로 쓰려면 먼저 고쳐야 할 게 있습니다.",
+  uiStartButton: "팀 만들기",
+  uiWorking: "팀을 짜는 중입니다. 1분쯤 걸려요.",
+  uiCopyPrompt: "이 지시문 복사하기",
+  uiCopied: "복사됐어요 — 이제 붙여넣으세요",
+  uiOpenTool: (tool) => `이 폴더에서 ${tool}를 열고 붙여넣으세요`,
+  uiMarkDone: "완료 — 다음은?",
+  uiUndo: "아직이에요, 되돌리기",
+  uiStepOf: (n, total) => `${total}단계 중 ${n}번째`,
+  uiFinishedTitle: "여기까지가 전부입니다",
+  uiFinishedBody: "이제 프로젝트가 돌아갈 겁니다. 열어서 확인해보세요.",
+  uiFolder: "만드는 위치",
+  uiIdeaPlaceholder: "내 요리법을 저장하고 재료로 검색하는 사이트",
+  uiNeedIdea: "무엇을 만들고 싶은지 한 문장이라도 먼저 적어주세요.",
+  uiSomethingWentWrong: "잘 안 됐습니다.",
   notAProject: "이 폴더는 아직 vibeRACI 프로젝트가 아닙니다.",
   notAProjectHint: '여기에 만들려면:  viberaci init "만들고 싶은 것"',
   claudeMdIntro:

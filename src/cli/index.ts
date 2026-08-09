@@ -15,12 +15,15 @@ import { runDone, runUndo } from "./commands/done.js";
 import { runInit } from "./commands/init.js";
 import { runNext } from "./commands/next.js";
 import { runStatus } from "./commands/status.js";
+import { runUi } from "./commands/ui.js";
 import { FriendlyError, openProject } from "./project.js";
 import { bold, cyan, dim, problem, say } from "./ui.js";
 
 const HELP = `${bold("viberaci")} - build your AI coding team
 
+  ${cyan("viberaci ui")}                            do all of this in your browser
   ${cyan("viberaci init")} ${dim('"what you want to build"')}   plan a project and set it up
+  ${dim("viberaci init")}                           ${dim("(no idea given: it asks you)")}
   ${cyan("viberaci next")}                          what to do right now
   ${cyan("viberaci done")}                          tick that off, show what is next
   ${cyan("viberaci status")}                        the whole plan and where you are
@@ -80,6 +83,16 @@ async function main(argv: string[]): Promise<number> {
         locale,
         goal: typeof rawGoal === "string" ? (rawGoal as Answers["goal"]) : undefined,
         interactive: flags.has("ask"),
+      });
+      return 0;
+    }
+
+    case "ui": {
+      const rawPort = flags.get("port");
+      await runUi({
+        locale,
+        port: typeof rawPort === "string" ? Number(rawPort) : undefined,
+        open: !flags.has("no-open"),
       });
       return 0;
     }
