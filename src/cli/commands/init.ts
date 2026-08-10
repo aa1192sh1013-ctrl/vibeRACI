@@ -51,7 +51,7 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
   }
 
   heading(s.workingOutTeam);
-  say(dim(s.planningTakesAMinute));
+  say(dim(s.planningTakesAWhile));
 
   const result = await createPlan({ ...answers, tools: tools.length > 0 ? tools : ["claude-code"] });
   for (const note of result.notes) {

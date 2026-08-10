@@ -57,7 +57,7 @@ export interface Strings {
   goalMvp: string;
   goalDeploy: string;
   workingOutTeam: string;
-  planningTakesAMinute: string;
+  planningTakesAWhile: string;
   filesCreated: (count: number) => string;
   gitStarted: string;
   buildOrderIn: (file: string) => string;
@@ -185,7 +185,8 @@ const en: Strings = {
   goalMvp: "Something that actually works",
   goalDeploy: "Something other people can use online",
   workingOutTeam: "Working out your team",
-  planningTakesAMinute: "This takes a minute. It is one request to your own coding tool.",
+  planningTakesAWhile:
+    "Usually about five minutes, sometimes longer. It is one request to your own coding tool.",
   filesCreated: (count) => `${count} files created`,
   gitStarted: "git started, so you can undo anything later",
   buildOrderIn: (file) => `your build order is in ${file}`,
@@ -244,7 +245,8 @@ const en: Strings = {
   uiToolsOk: "Your computer is ready.",
   uiToolsBad: "Something needs fixing before this will work well.",
   uiStartButton: "Build my team",
-  uiWorking: "Working out your team. This takes about a minute.",
+  uiWorking:
+    "Working out your team. Usually about five minutes, sometimes longer — you can leave this page open.",
   uiCopyPrompt: "Copy this prompt",
   uiCopied: "Copied — now paste it",
   uiOpenTool: (tool) => `Open ${tool} in this folder, then paste`,
@@ -322,7 +324,8 @@ const ko: Strings = {
   goalMvp: "실제로 동작하는 것",
   goalDeploy: "다른 사람도 온라인에서 쓸 수 있게",
   workingOutTeam: "팀을 짜는 중",
-  planningTakesAMinute: "1분쯤 걸립니다. 내 컴퓨터의 코딩 도구에 한 번 물어보는 것입니다.",
+  planningTakesAWhile:
+    "보통 5분쯤 걸리고, 더 걸릴 수도 있습니다. 내 컴퓨터의 코딩 도구에 한 번 물어보는 것입니다.",
   filesCreated: (count) => `파일 ${count}개를 만들었습니다`,
   gitStarted: "git을 시작했습니다. 나중에 언제든 되돌릴 수 있습니다",
   buildOrderIn: (file) => `만드는 순서는 ${file} 에 있습니다`,
@@ -380,7 +383,8 @@ const ko: Strings = {
   uiToolsOk: "준비됐습니다.",
   uiToolsBad: "제대로 쓰려면 먼저 고쳐야 할 게 있습니다.",
   uiStartButton: "팀 만들기",
-  uiWorking: "팀을 짜는 중입니다. 1분쯤 걸려요.",
+  uiWorking:
+    "팀을 짜는 중입니다. 보통 5분쯤 걸리고, 더 걸릴 수도 있어요 — 이 화면은 그대로 두셔도 됩니다.",
   uiCopyPrompt: "이 지시문 복사하기",
   uiCopied: "복사됐어요 — 이제 붙여넣으세요",
   uiOpenTool: (tool) => `이 폴더에서 ${tool}를 열고 붙여넣으세요`,
