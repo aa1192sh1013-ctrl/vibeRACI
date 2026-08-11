@@ -47,6 +47,29 @@ is not found, install Node from [nodejs.org](https://nodejs.org) — take the
 version it offers you — then **close your terminal and open a new one**, or it
 will keep saying the command is not found.
 
+### If `npx` is not found but Node is
+
+Some Windows installs end up with `node` on the path and `npx` not. Check
+whether npm made it:
+
+```bash
+npm -v
+```
+
+If that works, install vibesquad once and skip `npx` entirely:
+
+```bash
+npm install -g vibesquad
+vibesquad ui
+```
+
+Every command below then drops its `npx` prefix — `vibesquad doctor`,
+`vibesquad next`, and so on. It also starts faster, since nothing is downloaded
+each time.
+
+If `npm -v` fails too, the Node install is incomplete: install it again from
+[nodejs.org](https://nodejs.org) and reopen the terminal.
+
 Everything else, `vibesquad doctor` checks for you and tells you how to fix.
 You do not have to work it out in advance:
 
@@ -56,8 +79,8 @@ You do not have to work it out in advance:
 - **git**, optional. Without it your project still works; you just have no
   undo.
 
-A folder on your desktop or in your documents is fine. Avoid the very top of
-your C: drive on Windows, where writing sometimes needs administrator rights.
+Any folder you can write to is fine — desktop, documents, anywhere. It only has
+to be **empty**: vibesquad refuses to write over files it did not create.
 
 ## What you get
 
