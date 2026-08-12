@@ -18,6 +18,7 @@ import type { Answers } from "../../planner/answers.js";
 import { detectAll } from "../../planner/capabilities.js";
 import { createPlan } from "../../planner/index.js";
 import { initGitRepo } from "../../scaffold/git.js";
+import { countProjectCreated, countingIsOff } from "../../telemetry/count.js";
 import { ScaffoldConflictError, scaffoldProject } from "../../scaffold/write.js";
 import { isProjectDir } from "../../progress/progress.js";
 import { FriendlyError, openProject } from "../project.js";
@@ -82,6 +83,11 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
 
   const git = initGitRepo(dir);
   if (git.initialised) ok(s.gitStarted);
+
+  // Said out loud, once per project. Counting quietly would be the kind of
+  // thing that costs more trust than the number is worth.
+  if (!countingIsOff()) say(dim(`  ${s.countingNote}`));
+  void countProjectCreated();
 
   say();
   say(`  ${dim(s.buildOrderIn(cyan("START-HERE.md")))}`);

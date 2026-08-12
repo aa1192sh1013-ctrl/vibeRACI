@@ -61,6 +61,7 @@ export interface Strings {
   filesCreated: (count: number) => string;
   gitStarted: string;
   buildOrderIn: (file: string) => string;
+  countingNote: string;
   alreadyAProject: string;
   alreadyAProjectHint: string;
   folderNotEmpty: string;
@@ -190,6 +191,8 @@ const en: Strings = {
   filesCreated: (count) => `${count} files created`,
   gitStarted: "git started, so you can undo anything later",
   buildOrderIn: (file) => `your build order is in ${file}`,
+  countingNote:
+    "Counted one project built, so I know whether anyone is using this. Nothing about you or your idea is sent. Turn it off with VIBESQUAD_NO_COUNT=1",
   alreadyAProject: "There is already a vibesquad project in this folder.",
   alreadyAProjectHint: "Run  vibesquad status  to see it, or start somewhere else.",
   folderNotEmpty: "This folder already has files with those names, so nothing was written.",
@@ -329,6 +332,8 @@ const ko: Strings = {
   filesCreated: (count) => `파일 ${count}개를 만들었습니다`,
   gitStarted: "git을 시작했습니다. 나중에 언제든 되돌릴 수 있습니다",
   buildOrderIn: (file) => `만드는 순서는 ${file} 에 있습니다`,
+  countingNote:
+    "프로젝트 하나 만들어진 것으로 1이 기록됩니다. 쓰는 사람이 있는지 알기 위한 것이고, 여러분이나 아이디어에 관한 정보는 전혀 보내지 않습니다. 끄려면 VIBESQUAD_NO_COUNT=1",
   alreadyAProject: "이 폴더에는 이미 vibesquad 프로젝트가 있습니다.",
   alreadyAProjectHint: "vibesquad status 로 확인하시거나, 다른 폴더에서 시작하세요.",
   folderNotEmpty: "같은 이름의 파일이 이미 있어서 아무것도 쓰지 않았습니다.",

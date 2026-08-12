@@ -106,9 +106,12 @@ with [START-HERE.md](examples/generated/START-HERE.md).
 ## How it works
 
 `vibesquad ui` opens a local page: it checks your computer, takes your idea, and
-then shows one step at a time with a button that copies the prompt. Nothing
-leaves your machine — the page is served on 127.0.0.1, needs a key printed in
-your terminal, and refuses requests from anywhere else.
+then shows one step at a time with a button that copies the prompt. The page is
+served on 127.0.0.1, needs a key printed in your terminal, and refuses requests
+from anywhere else.
+
+Your idea and your code stay on your machine. The one exception is counted and
+described below.
 
 In the terminal, `next` shows the same one step and one thing to do about it.
 `next --copy` puts the prompt straight on your clipboard.
@@ -147,6 +150,29 @@ nothing to sign up for and nothing to pay:
 `vibesquad doctor` reports which of these actually work on your machine. It looks
 rather than asking, because "do you have Claude Code?" gets a confident yes from
 people whose command line has never been logged in.
+
+## What gets counted
+
+When a project is successfully created, vibesquad downloads one tiny file from
+a GitHub release and throws it away. GitHub counts downloads of release assets,
+so a number goes up and the repository owner can see it. That is the whole
+mechanism.
+
+- **Sent:** nothing. No payload, no identifier, no idea text, nothing about
+  your project or your machine. GitHub sees the request itself — an IP and a
+  user agent, as it would for any download.
+- **Counted:** projects created. Not people. One person building twenty
+  projects and twenty people building one look identical.
+- **When:** only on a successful `init`. Never on `doctor`, `next`, `done`, or
+  anything else.
+- **Never:** in CI, or under a test runner.
+
+To turn it off, set `VIBESQUAD_NO_COUNT=1`. The tool says it is counting, once
+per project, rather than doing it quietly.
+
+It exists for one reason: without it there is no way to tell whether anyone is
+using this at all, and that question is worth a number even when the number is
+this crude.
 
 ## Status
 

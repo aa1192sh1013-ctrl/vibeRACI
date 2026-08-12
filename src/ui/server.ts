@@ -22,6 +22,7 @@ import { detectAll } from "../planner/capabilities.js";
 import { markDone, markUndone, saveProgress, loadProgress } from "../progress/progress.js";
 import { initGitRepo } from "../scaffold/git.js";
 import { scaffoldProject } from "../scaffold/write.js";
+import { countProjectCreated } from "../telemetry/count.js";
 import { renderPage } from "./page.js";
 import { buildState, readPlan } from "./state.js";
 
@@ -137,6 +138,8 @@ async function handle(
 
     scaffoldProject(result.plan, ctx.dir);
     initGitRepo(ctx.dir);
+    // Same count as the command line makes; the page discloses it too.
+    void countProjectCreated();
 
     send(res, 200, { notes: result.notes, state: buildState(ctx.dir, ctx.locale) });
     return;

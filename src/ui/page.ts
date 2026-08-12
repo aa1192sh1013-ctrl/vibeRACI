@@ -43,6 +43,7 @@ export function renderPage(locale: Locale, secret: string): string {
     finishedBody: s.uiFinishedBody,
     folder: s.uiFolder,
     wrong: s.uiSomethingWentWrong,
+    counting: s.countingNote,
   };
 
   return `<!doctype html>
@@ -244,7 +245,8 @@ function projectScreen(state) {
     '<h1>' + esc(p.name) + '</h1><p class="muted">' + esc(p.idea) + '</p>' + now +
     '<div class="card"><h2>' + esc(T.team) + '</h2>' + roles + '</div>' +
     '<div class="card"><h2>' + esc(T.plan) + '</h2><ol class="steps">' + steps + '</ol>' +
-    '<p class="muted small" style="margin:14px 0 0">' + esc(T.folder) + ': <code>' + esc(state.dir) + '</code></p></div>';
+    '<p class="muted small" style="margin:14px 0 0">' + esc(T.folder) + ': <code>' + esc(state.dir) + '</code></p>' +
+    '<p class="muted small" style="margin:6px 0 0">' + esc(T.counting) + '</p></div>';
 
   const copy = document.getElementById("copy");
   if (copy) copy.onclick = async () => {
