@@ -37,7 +37,7 @@ If the work requires changing a file outside the list above:
 3. Tell the user which teammate should handle it.
 4. Continue with the parts you can do.
 
-## You are done when
+## Check these are done
 
 - [ ] The database file is created when the app starts
 - [ ] A new account can be created and logged into

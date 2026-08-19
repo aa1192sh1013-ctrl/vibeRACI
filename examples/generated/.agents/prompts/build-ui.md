@@ -38,7 +38,7 @@ If the work requires changing a file outside the list above:
 3. Tell the user which teammate should handle it.
 4. Continue with the parts you can do.
 
-## You are done when
+## Check these are done
 
 - [ ] Every screen can be reached by clicking, with no dead links
 - [ ] The feed shows listings that came from the server, not fake placeholder data

@@ -28,7 +28,7 @@ Decide the shape of the data and the folder layout so the other two never have t
 1. Open Claude Code in this project folder.
 2. Copy everything in `.agents/prompts/plan-structure.md` and paste it in.
 
-**You are done when**
+**Check these are done**
 
 - [ ] docs/architecture.md, docs/data-model.md and docs/api.md all exist
 - [ ] shared/types.ts exists and lists a type for users, listings and messages
@@ -43,7 +43,7 @@ Make the server side real: tables, accounts, and the addresses the screens will 
 1. Open Codex in this project folder.
 2. Copy everything in `.agents/prompts/build-backend.md` and paste it in.
 
-**You are done when**
+**Check these are done**
 
 - [ ] The database file is created when the app starts
 - [ ] A new account can be created and logged into
@@ -58,7 +58,7 @@ Build every screen a user touches, using the addresses the Architect wrote down.
 1. Open Claude Code in this project folder.
 2. Copy everything in `.agents/prompts/build-ui.md` and paste it in.
 
-**You are done when**
+**Check these are done**
 
 - [ ] Every screen can be reached by clicking, with no dead links
 - [ ] The feed shows listings that came from the server, not fake placeholder data
@@ -73,7 +73,7 @@ Find what is broken or missing before the owner calls this finished.
 1. Open Claude Code in this project folder.
 2. Copy everything in `.agents/prompts/review.md` and paste it in.
 
-**You are done when**
+**Check these are done**
 
 - [ ] Tests exist for sign up, posting a listing, and sending a message
 - [ ] All tests pass
@@ -93,7 +93,7 @@ _This one is yours. No AI for this step — a coding agent cannot open your app 
 4. Try something silly on purpose: an empty title, a very long description
 5. Write down anything that looked wrong or confusing
 
-**You are done when**
+**Check these are done**
 
 - [ ] The app opens without an error
 - [ ] You posted a listing and saw it appear in the feed

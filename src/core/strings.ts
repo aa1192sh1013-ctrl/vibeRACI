@@ -121,6 +121,47 @@ export interface Strings {
   uiIdeaPlaceholder: string;
   uiNeedIdea: string;
   uiSomethingWentWrong: string;
+  // the setup guide that opens the page
+  setupHeading: string;
+  setupNode: string;
+  setupNodeHow: string;
+  setupTool: string;
+  setupToolHow: string;
+  setupAccount: string;
+  setupAccountHow: string;
+  setupKeepOpen: string;
+  setupKeepOpenHow: string;
+  // attaching a written brief
+  uploadLabel: string;
+  uploadHint: string;
+  uploadChosen: (name: string) => string;
+  uploadClear: string;
+  uploadTooBig: string;
+  uploadWrongType: string;
+  // the closing report
+  reportOpen: string;
+  reportTitle: string;
+  reportIntro: string;
+  reportBack: string;
+  reportBuiltHeading: string;
+  reportBuiltNote: string;
+  reportNoFiles: string;
+  reportFileCount: (count: number) => string;
+  reportCheckHeading: string;
+  reportCheckStepsDone: (done: number, total: number) => string;
+  reportCheckFilesTotal: (count: number) => string;
+  reportCheckEmptyArea: (role: string) => string;
+  reportCheckAllAreasFilled: string;
+  reportCheckYourTurn: string;
+  reportNextHeading: string;
+  reportNextIntro: string;
+  suggestUseIt: string;
+  suggestShowSomeone: string;
+  suggestReadme: string;
+  suggestCommit: string;
+  suggestTests: string;
+  suggestDeploy: string;
+  suggestUnderstand: string;
   // errors
   notAProject: string;
   notAProjectHint: string;
@@ -137,7 +178,7 @@ const en: Strings = {
   sharedPaths: "Shared files — edit with care",
   deniedPaths: "Do not touch",
   yourJob: "Your job",
-  doneWhen: "You are done when",
+  doneWhen: "Check these are done",
   youAre: "You are",
   primaryResponsibility: "What you take care of",
   mustNotModify: "What you must not modify",
@@ -180,7 +221,8 @@ const en: Strings = {
   thenRun: "then run:",
   whatToDoNow: "what to do now:",
   askIdea: "What do you want to build?",
-  askIdeaHint: "A sentence or two is plenty. Plain words are fine.",
+  askIdeaHint:
+    "A sentence or two works. So does a page — the more you say, the better the plan fits. Plain words are fine.",
   askGoal: "How far do you want to take it?",
   goalDemo: "Just something to look at",
   goalMvp: "Something that actually works",
@@ -262,6 +304,57 @@ const en: Strings = {
   uiIdeaPlaceholder: "A site where I keep my recipes and search them by ingredient",
   uiNeedIdea: "Write a sentence about what you want to build first.",
   uiSomethingWentWrong: "That did not work.",
+  setupHeading: "Before you start",
+  setupNode: "Node.js 20 or newer",
+  setupNodeHow:
+    "You already have it, or this page would not be open. If a friend gets stuck, they install it from nodejs.org and then open a new terminal.",
+  setupTool: "Claude Code or Codex, signed in",
+  setupToolHow:
+    "The command-line version, not the app. Being signed in to the Claude or ChatGPT app is a different thing. Without one you still get a project, but the plan will be generic rather than about your idea.",
+  setupAccount: "It uses your own AI account",
+  setupAccountHow:
+    "Working out your team sends one request through your own Claude Code or Codex. There is nothing to sign up for and nothing extra to pay, but it does use your own allowance.",
+  setupKeepOpen: "Leave the terminal open while it works",
+  setupKeepOpenHow:
+    "Working out your team takes about five minutes. Close the terminal during that and the plan is lost. Once your project exists, your progress is saved — closing it just means running vibesquad ui again to carry on.",
+  uploadLabel: "Have a written brief? Attach it.",
+  uploadHint: "Optional. A .txt or .md file, up to 100 KB. Its contents go into the plan with your idea.",
+  uploadChosen: (name) => `${name} attached`,
+  uploadClear: "remove",
+  uploadTooBig: "That file is too big. 100 KB is the limit.",
+  uploadWrongType: "Only plain text files work here — .txt or .md.",
+  reportOpen: "See the report",
+  reportTitle: "What your team built",
+  reportIntro:
+    "Everything below is read from your project folder as it is right now. Nothing here is a guess.",
+  reportBack: "Back",
+  reportBuiltHeading: "What is in each teammate's area",
+  reportBuiltNote:
+    "vibesquad cannot watch the coding tools work, so this is the files that now exist where each teammate was responsible — not a claim about who typed what.",
+  reportNoFiles: "Nothing here yet",
+  reportFileCount: (count) => (count === 1 ? "1 file" : `${count} files`),
+  reportCheckHeading: "A quick check",
+  reportCheckStepsDone: (done, total) => `${done} of ${total} steps ticked off`,
+  reportCheckFilesTotal: (count) => `${count} files in the project`,
+  reportCheckEmptyArea: (role) => `${role} has no files yet — that step may not have run`,
+  reportCheckAllAreasFilled: "Every teammate's area has something in it",
+  reportCheckYourTurn: "Open the app and use it yourself. That is the only check that really counts.",
+  reportNextHeading: "What to try next",
+  reportNextIntro: "None of this is required. Pick whatever sounds useful.",
+  suggestUseIt:
+    "Use it yourself for a week. Nothing finds the awkward parts faster than needing the thing you built.",
+  suggestShowSomeone:
+    "Put it in front of one other person and say nothing. Where they hesitate is where the work is.",
+  suggestReadme:
+    "Write down how to start it, in your README. In a month you will not remember, and neither will anyone else.",
+  suggestCommit:
+    "Commit what you have now, before changing anything. git is already set up here, so it is one command away and it makes everything after this undoable.",
+  suggestTests:
+    "Ask a coding agent to write a test for the single most important thing your app does. One is worth far more than none.",
+  suggestDeploy:
+    "Put it online so people can reach it without your laptop running. Ask a coding agent how, and say which service you want to use.",
+  suggestUnderstand:
+    "Pick one file you do not understand and ask a coding agent to walk you through it line by line. This is the cheapest way to stop being a beginner.",
   notAProject: "This folder is not a vibesquad project yet.",
   notAProjectHint: 'Make one here with:  vibesquad init "what you want to build"',
   claudeMdIntro:
@@ -278,7 +371,7 @@ const ko: Strings = {
   sharedPaths: "같이 쓰는 파일 — 조심해서 수정",
   deniedPaths: "건드리지 말 것",
   yourJob: "할 일",
-  doneWhen: "이것들이 되면 완료",
+  doneWhen: "이것들이 완료되었어요",
   youAre: "당신의 역할",
   primaryResponsibility: "맡은 일",
   mustNotModify: "고치면 안 되는 것",
@@ -321,7 +414,8 @@ const ko: Strings = {
   thenRun: "다음 실행:",
   whatToDoNow: "지금 할 일:",
   askIdea: "무엇을 만들고 싶으세요?",
-  askIdeaHint: "한두 문장이면 충분합니다. 편하게 쓰세요.",
+  askIdeaHint:
+    "한두 문장도 좋고, 길게 자세히 적으셔도 좋습니다. 많이 적을수록 계획이 더 잘 맞습니다. 편하게 쓰세요.",
   askGoal: "어디까지 만들고 싶으세요?",
   goalDemo: "보기만 되면 됨",
   goalMvp: "실제로 동작하는 것",
@@ -402,6 +496,56 @@ const ko: Strings = {
   uiIdeaPlaceholder: "내 요리법을 저장하고 재료로 검색하는 사이트",
   uiNeedIdea: "무엇을 만들고 싶은지 한 문장이라도 먼저 적어주세요.",
   uiSomethingWentWrong: "잘 안 됐습니다.",
+  setupHeading: "시작하기 전에",
+  setupNode: "Node.js 20 이상",
+  setupNodeHow:
+    "이미 있으십니다. 없으면 이 화면이 안 떴을 거예요. 친구분이 막히면 nodejs.org에서 설치한 뒤 터미널을 새로 열라고 알려주세요.",
+  setupTool: "Claude Code 또는 Codex, 로그인된 상태",
+  setupToolHow:
+    "앱 말고 터미널에서 쓰는 쪽입니다. Claude 앱이나 ChatGPT 앱에 로그인한 것과는 별개예요. 없어도 프로젝트는 나오지만, 내 아이디어에 맞춘 계획이 아니라 일반적인 계획이 됩니다.",
+  setupAccount: "내 AI 계정을 씁니다",
+  setupAccountHow:
+    "팀을 짤 때 내 Claude Code나 Codex로 요청이 한 번 나갑니다. 따로 가입하거나 결제할 건 없지만, 내 사용량은 씁니다.",
+  setupKeepOpen: "팀 짜는 동안 터미널을 닫지 마세요",
+  setupKeepOpenHow:
+    "팀 짜는 데 5분쯤 걸립니다. 그 사이에 터미널을 닫으면 계획이 날아갑니다. 프로젝트가 만들어진 뒤에는 진행 상황이 저장되니, 닫아도 vibesquad ui를 다시 실행하면 이어서 하시면 됩니다.",
+  uploadLabel: "기획서가 있으면 올려주세요",
+  uploadHint: "선택 사항입니다. .txt 또는 .md 파일, 100KB까지. 적어주신 아이디어와 함께 계획에 반영됩니다.",
+  uploadChosen: (name) => `${name} 첨부됨`,
+  uploadClear: "빼기",
+  uploadTooBig: "파일이 너무 큽니다. 100KB까지 됩니다.",
+  uploadWrongType: "글자 파일만 됩니다 — .txt 또는 .md",
+  reportOpen: "보고서 보기",
+  reportTitle: "우리 팀이 만든 것",
+  reportIntro: "아래 내용은 지금 이 순간 프로젝트 폴더를 읽어서 만든 것입니다. 추측이 아닙니다.",
+  reportBack: "돌아가기",
+  reportBuiltHeading: "팀원별 담당 구역에 있는 것",
+  reportBuiltNote:
+    "vibesquad는 코딩 도구가 일하는 걸 지켜볼 수 없습니다. 그래서 이건 각 팀원이 맡은 자리에 지금 있는 파일 목록이지, 누가 무엇을 썼다는 주장이 아닙니다.",
+  reportNoFiles: "아직 비어 있음",
+  reportFileCount: (count) => `파일 ${count}개`,
+  reportCheckHeading: "간단 점검",
+  reportCheckStepsDone: (done, total) => `${total}단계 중 ${done}단계 완료`,
+  reportCheckFilesTotal: (count) => `프로젝트에 파일 ${count}개`,
+  reportCheckEmptyArea: (role) => `${role} 자리가 비어 있습니다 — 그 단계가 안 돌았을 수 있어요`,
+  reportCheckAllAreasFilled: "모든 팀원 자리에 뭔가 들어 있습니다",
+  reportCheckYourTurn: "앱을 열어서 직접 써보세요. 진짜 점검은 그것뿐입니다.",
+  reportNextHeading: "이다음에 해볼 것",
+  reportNextIntro: "꼭 해야 하는 건 아닙니다. 끌리는 것만 골라보세요.",
+  suggestUseIt:
+    "일주일만 직접 써보세요. 내가 만든 걸 내가 필요해서 쓸 때만큼 어색한 곳이 빨리 드러나는 방법은 없습니다.",
+  suggestShowSomeone:
+    "다른 사람 한 명 앞에 놓고 아무 설명도 하지 마세요. 그 사람이 멈칫하는 지점이 고칠 곳입니다.",
+  suggestReadme:
+    "실행하는 방법을 README에 적어두세요. 한 달 뒤엔 본인도 기억 못 하고, 남은 더 모릅니다.",
+  suggestCommit:
+    "뭘 더 바꾸기 전에 지금 상태를 커밋해두세요. git은 이미 준비돼 있어서 명령 한 줄이면 되고, 이후 작업이 전부 되돌릴 수 있게 됩니다.",
+  suggestTests:
+    "이 앱에서 가장 중요한 기능 하나에 테스트를 붙여달라고 코딩 도구에 부탁해보세요. 하나라도 있는 게 없는 것보다 훨씬 낫습니다.",
+  suggestDeploy:
+    "내 노트북이 안 켜져 있어도 남들이 들어올 수 있게 온라인에 올려보세요. 코딩 도구에 어떤 서비스를 쓸지 말하고 방법을 물어보면 됩니다.",
+  suggestUnderstand:
+    "이해 안 되는 파일 하나를 골라서 코딩 도구에 한 줄씩 설명해달라고 해보세요. 초보를 벗어나는 가장 싼 방법입니다.",
   notAProject: "이 폴더는 아직 vibesquad 프로젝트가 아닙니다.",
   notAProjectHint: '여기에 만들려면:  vibesquad init "만들고 싶은 것"',
   claudeMdIntro:

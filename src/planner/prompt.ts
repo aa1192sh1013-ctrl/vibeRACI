@@ -85,8 +85,12 @@ export function buildUserPrompt(answers: Answers): string {
 
   const tools = answers.tools.map(toolName).join(" and ");
 
+  const brief = answers.brief?.trim()
+    ? `\n\nTHEIR WRITTEN BRIEF\nThe user attached this document. Where it conflicts with the one-line\nidea above, prefer the document -- it is the considered version.\n\n${answers.brief.trim()}`
+    : "";
+
   return `IDEA
-${answers.idea}
+${answers.idea}${brief}
 
 HOW FAR THEY WANT TO GO
 ${goal}

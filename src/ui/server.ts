@@ -24,6 +24,7 @@ import { initGitRepo } from "../scaffold/git.js";
 import { scaffoldProject } from "../scaffold/write.js";
 import { countProjectCreated } from "../telemetry/count.js";
 import { renderPage } from "./page.js";
+import { buildReport } from "./report.js";
 import { buildState, readPlan } from "./state.js";
 
 export interface UiServer {
@@ -72,8 +73,9 @@ async function readJson(req: IncomingMessage): Promise<Record<string, unknown>> 
   let size = 0;
   for await (const chunk of req) {
     size += (chunk as Buffer).length;
-    // An idea is a sentence. Anything approaching a megabyte is not one.
-    if (size > 256 * 1024) throw new Error("that is too long");
+    // Room for an attached brief (capped at 100 KB) plus JSON escaping, and
+    // nothing like enough for anyone to post something strange.
+    if (size > 512 * 1024) throw new Error("that is too long");
     chunks.push(chunk as Buffer);
   }
   if (chunks.length === 0) return {};
@@ -128,8 +130,13 @@ async function handle(
     if (found.find((c) => c.id === "claude-cli")?.status !== "not-installed") tools.push("claude-code");
     if (found.find((c) => c.id === "codex-cli")?.status === "ready") tools.push("codex");
 
+    // Trimmed here as well as in the browser: the page is not the only thing
+    // that can reach this endpoint.
+    const brief = typeof body.brief === "string" ? body.brief.slice(0, 100_000).trim() : undefined;
+
     const result = await createPlan({
       idea,
+      brief: brief || undefined,
       goal,
       experience: "none",
       tools: tools.length > 0 ? tools : ["claude-code"],
@@ -142,6 +149,16 @@ async function handle(
     void countProjectCreated();
 
     send(res, 200, { notes: result.notes, state: buildState(ctx.dir, ctx.locale) });
+    return;
+  }
+
+  if (url.pathname === "/api/report" && req.method === "GET") {
+    const plan = readPlan(ctx.dir);
+    if (!plan) {
+      send(res, 400, { error: "no project here" });
+      return;
+    }
+    send(res, 200, buildReport(ctx.dir, plan, loadProgress(ctx.dir, plan), ctx.locale));
     return;
   }
 

@@ -11,6 +11,12 @@ import { localeSchema, toolIdSchema } from "../core/schema.js";
 export const answersSchema = z.object({
   /** Free text. "I want a marketplace where people sell used furniture." */
   idea: z.string().min(1),
+  /**
+   * A written brief the user attached, if any. Kept apart from `idea` because
+   * `idea` becomes the one-line description shown on every screen, and a
+   * pasted-in document would fill it. The planner sees both.
+   */
+  brief: z.string().optional(),
   /** How far they want to take it, which decides how much team is warranted. */
   goal: z.enum(["demo", "mvp", "deploy"]),
   experience: z.enum(["none", "some", "developer"]),

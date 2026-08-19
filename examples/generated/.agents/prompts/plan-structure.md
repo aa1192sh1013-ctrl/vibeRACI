@@ -30,7 +30,7 @@ If the work requires changing a file outside the list above:
 3. Tell the user which teammate should handle it.
 4. Continue with the parts you can do.
 
-## You are done when
+## Check these are done
 
 - [ ] docs/architecture.md, docs/data-model.md and docs/api.md all exist
 - [ ] shared/types.ts exists and lists a type for users, listings and messages
