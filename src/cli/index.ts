@@ -8,7 +8,9 @@
  *
  * Every path out of here ends with the user knowing the next command to type.
  */
-import type { Answers } from "../planner/answers.js";
+import { ZodError } from "zod";
+import { goalSchema } from "../planner/answers.js";
+import { enumFlag, numberFlag, textFlag } from "./flags.js";
 import { resolveLocale } from "./locale.js";
 import { runDoctor } from "./commands/doctor.js";
 import { runDone, runUndo } from "./commands/done.js";
@@ -54,6 +56,8 @@ ${twoColumns(
     ["--show", `print the prompt here instead of a path     ${dim("(next)")}`],
     ["--lang ko", `write the plan in Korean                    ${dim("(init)")}`],
     ["--goal demo|mvp|deploy", dim("(init)")],
+    ["--dir <folder>", `work in this folder instead of here        ${dim("(init, ui)")}`],
+    ["--port <number>", `serve the page on this port                ${dim("(ui)")}`],
   ],
   (text) => text,
 )}
@@ -99,21 +103,21 @@ async function main(argv: string[]): Promise<number> {
 
   switch (command) {
     case "init": {
-      const rawGoal = flags.get("goal");
       await runInit({
         idea: positional.join(" ") || undefined,
         locale,
-        goal: typeof rawGoal === "string" ? (rawGoal as Answers["goal"]) : undefined,
+        goal: enumFlag(flags.get("goal"), goalSchema, "goal"),
+        dir: textFlag(flags.get("dir"), "dir"),
         interactive: flags.has("ask"),
       });
       return 0;
     }
 
     case "ui": {
-      const rawPort = flags.get("port");
       await runUi({
         locale,
-        port: typeof rawPort === "string" ? Number(rawPort) : undefined,
+        port: numberFlag(flags.get("port"), "port"),
+        dir: textFlag(flags.get("dir"), "dir"),
         open: !flags.has("no-open"),
       });
       return 0;
@@ -163,6 +167,15 @@ main(process.argv.slice(2))
     if (error instanceof FriendlyError) {
       problem(error.message);
       if (error.hint) say(dim(`  ${error.hint}`));
+    } else if (error instanceof ZodError) {
+      // Left alone, a ZodError prints its issues as a JSON array. That is a
+      // stack trace by another name: nobody it reaches can act on it.
+      problem("The plan that came back did not make sense:");
+      for (const issue of error.issues) {
+        const path = issue.path.join(".");
+        say(dim(`  - ${path ? `${path}: ` : ""}${issue.message}`));
+      }
+      say(dim("  Run the command again -- planning is not deterministic."));
     } else {
       problem(error instanceof Error ? error.message : String(error));
     }

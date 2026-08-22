@@ -8,6 +8,14 @@
 import { z } from "zod";
 import { localeSchema, toolIdSchema } from "../core/schema.js";
 
+/**
+ * Named separately from `answersSchema` so the command line can check a flag
+ * against the same list the planner uses. A second copy of these values would
+ * drift, and the drift only shows up after a five-minute planning call.
+ */
+export const goalSchema = z.enum(["demo", "mvp", "deploy"]);
+export const experienceSchema = z.enum(["none", "some", "developer"]);
+
 export const answersSchema = z.object({
   /** Free text. "I want a marketplace where people sell used furniture." */
   idea: z.string().min(1),
@@ -18,8 +26,8 @@ export const answersSchema = z.object({
    */
   brief: z.string().optional(),
   /** How far they want to take it, which decides how much team is warranted. */
-  goal: z.enum(["demo", "mvp", "deploy"]),
-  experience: z.enum(["none", "some", "developer"]),
+  goal: goalSchema,
+  experience: experienceSchema,
   tools: z.array(toolIdSchema).min(1),
   locale: localeSchema,
 });

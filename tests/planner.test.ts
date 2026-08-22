@@ -290,4 +290,49 @@ describe("planning with a model", () => {
     });
     expect(result.source).toBe("template");
   });
+
+  it("keeps the lane when one call fails for no stated reason", async () => {
+    // A real run was lost this way: one opaque failure, and a plan that knew
+    // nothing about the user's idea came back instead.
+    let calls = 0;
+    const provider: Provider = {
+      id: "claude-cli",
+      label: "Claude Code",
+      async complete() {
+        calls++;
+        if (calls === 1) throw new ProviderError("claude-cli", "claude returned an error");
+        return goodOutput();
+      },
+    };
+
+    const result = await createPlan(answers, {
+      providers: [provider],
+      env: noTools,
+      sleep: async () => {},
+    });
+
+    expect(result.source).toBe("claude-cli");
+    expect(calls).toBe(2);
+  });
+
+  it("does not spend retries on a tool that is not installed", async () => {
+    let calls = 0;
+    const provider: Provider = {
+      id: "claude-cli",
+      label: "Claude Code",
+      async complete() {
+        calls++;
+        throw new ProviderError("claude-cli", "could not run claude: ENOENT");
+      },
+    };
+
+    const result = await createPlan(answers, {
+      providers: [provider],
+      env: noTools,
+      sleep: async () => {},
+    });
+
+    expect(result.source).toBe("template");
+    expect(calls).toBe(1);
+  });
 });

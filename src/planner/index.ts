@@ -27,6 +27,7 @@ import { buildRepairPrompt, buildSystemPrompt, buildUserPrompt } from "./prompt.
 import { createAnthropicApiProvider } from "./providers/anthropic-api.js";
 import { createClaudeCliProvider } from "./providers/claude-cli.js";
 import { createCodexCliProvider } from "./providers/codex-cli.js";
+import { completeWithRetries } from "./providers/retry.js";
 import { ProviderError, type Provider } from "./providers/types.js";
 import { buildTemplateOutput } from "./template.js";
 
@@ -46,8 +47,16 @@ export interface CreatePlanOptions {
   allowTemplate?: boolean;
   /** Retries given to a model whose plan was rejected. */
   maxRepairAttempts?: number;
+  /**
+   * Retries given to a call that failed for a reason unrelated to the answer --
+   * an overloaded API, a timeout, an error the CLI would not explain. Zero
+   * means a single unlucky call abandons the lane, which is what used to happen.
+   */
+  maxTransientRetries?: number;
   now?: Date;
   env?: NodeJS.ProcessEnv;
+  /** Swapped out in tests so backoff does not cost real seconds. */
+  sleep?: (ms: number) => Promise<void>;
 }
 
 export async function createPlan(
@@ -57,8 +66,10 @@ export async function createPlan(
   const {
     allowTemplate = true,
     maxRepairAttempts = 1,
+    maxTransientRetries = 2,
     now = new Date(),
     env = process.env,
+    sleep,
   } = options;
 
   const providers = options.providers ?? chooseProviders(answers, env);
@@ -66,7 +77,13 @@ export async function createPlan(
 
   for (const provider of providers) {
     try {
-      const output = await planWithProvider(provider, answers, maxRepairAttempts);
+      const output = await planWithProvider(
+        provider,
+        answers,
+        maxRepairAttempts,
+        maxTransientRetries,
+        sleep,
+      );
       return { plan: assemblePlan(answers, output, now), source: provider.id as PlanSource, notes };
     } catch (error) {
       notes.push(
@@ -125,13 +142,17 @@ async function planWithProvider(
   provider: Provider,
   answers: Answers,
   maxRepairAttempts: number,
+  maxTransientRetries: number,
+  sleep?: (ms: number) => Promise<void>,
 ) {
   const system = buildSystemPrompt();
   let user = buildUserPrompt(answers);
   let lastProblems: string[] = [];
 
   for (let attempt = 0; attempt <= maxRepairAttempts; attempt++) {
-    const raw = await provider.complete({ system, user });
+    // Bad luck gets another go before the lane is written off; a plan the
+    // schema rejected is handled by the loop this sits inside.
+    const raw = await completeWithRetries(provider, { system, user }, maxTransientRetries, sleep);
 
     try {
       const output = plannerOutputSchema.parse(extractJson(raw));

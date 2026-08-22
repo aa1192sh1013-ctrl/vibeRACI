@@ -7,3 +7,15 @@ dist/
 
 # Local output from `npm run plan`
 .plan-out.json
+
+# Demo projects generated while trying things out. `_` marks them as scratch,
+# and they are real vibesquad projects, so without this they arrive as a folder
+# of someone else's app inside this repository.
+_vibesquad_*/
+
+# Screenshots, recordings and drafts made for writing about this, not for
+# shipping it.
+vibesquad-shots/
+*.gif
+*.zip
+velog-*.md

@@ -23,6 +23,30 @@ export interface ClaudeCliResult {
   is_error?: boolean;
   result?: string;
   total_cost_usd?: number;
+  /** "success", "error_during_execution", and friends. */
+  subtype?: string;
+  /** Set when the failure came from the API rather than the CLI. */
+  api_error_status?: string | number | null;
+}
+
+/**
+ * Everything the CLI will tell us about a failure, in one line.
+ *
+ * A bare "claude returned an error" once cost an afternoon: the run fell back
+ * to a generic plan and there was nothing to work out why from. The fields are
+ * usually populated even when `result` is not.
+ */
+function describeFailure(parsed: ClaudeCliResult): string {
+  if (typeof parsed.result === "string" && parsed.result.trim()) return parsed.result;
+
+  const detail = [
+    parsed.subtype ? `subtype=${parsed.subtype}` : undefined,
+    parsed.api_error_status ? `api_error_status=${parsed.api_error_status}` : undefined,
+  ].filter(Boolean);
+
+  return detail.length > 0
+    ? `claude returned an error (${detail.join(", ")})`
+    : "claude returned an error with no explanation";
 }
 
 export function createClaudeCliProvider(model = DEFAULT_CLAUDE_MODEL): Provider {
@@ -77,7 +101,7 @@ export function createClaudeCliProvider(model = DEFAULT_CLAUDE_MODEL): Provider 
         }
 
         if (parsed.is_error || typeof parsed.result !== "string") {
-          throw new ProviderError("claude-cli", parsed.result ?? "claude returned an error");
+          throw new ProviderError("claude-cli", describeFailure(parsed));
         }
 
         return parsed.result;
